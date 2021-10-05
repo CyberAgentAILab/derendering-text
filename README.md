@@ -1,13 +1,12 @@
 ## Paper (De-rendering stylized texts)
-Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>
 
-<sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University
+<img src = "example/rec0.png" title = "rec" >
 
+Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>  
+<sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 Accepted to ICCV2021.
 [[paper]()]
 [[project-page]()]
-
-<img src = "example/rec0.png" title = "rec" >
 
 ## Introduction
 This repository contains the codes for ["De-rendering stylized texts"]().
