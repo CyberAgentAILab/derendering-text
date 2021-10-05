@@ -48,7 +48,7 @@ Generate pre-rendered alpha maps by
 ```bash
 python -m utilLib.gen_pams
 ```
-Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`
+Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`.
 
 <div align = 'center'>
 <img src = "example/sample.jpg" title = "inp" height = "300" >
@@ -59,8 +59,8 @@ Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`
 ## Usage
 
 ### Test
-Download the weight file from this link.
-([weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing))  
+Download the weight file from this link
+([weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)).  
 Locate the weight file in `weights/font100_unified.pth`.
 
 Example usage.
@@ -69,7 +69,7 @@ python test.py --imgfile=example/sample.jpg
 ```
 Note
 - imgfile option: path of an input image
-- results would be generated in `res/`.
+- results would be generated in `res/`
 
 ### Data generation
 in progress
@@ -80,7 +80,7 @@ in progress
 
 ## Todo
 - [x] Testing codes
-- [ ] Text image generator codes
+- [ ] Codes for the text image generator
 - [ ] Training codes
 - [ ] Add notebooks for the guide
 
