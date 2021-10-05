@@ -1,0 +1,10 @@
+h5py
+skia-python
+fonttools
+logzero
+opencv-python
+pyclipper
+scikit-image
+scikit-learn
+scipy
+Shapely
