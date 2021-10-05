@@ -15,7 +15,7 @@ We propose to parse rendering parameters of stylized texts utilizing a neural ne
 <img src = "example/concept.jpg" title = "concept" >
 
 ### Demo
-The proposed model parses rendering parameters based on famous 2d graphic engine [Skia.org](https: // skia.org /), which has compatibility with CSS in the Web.
+The proposed model parses rendering parameters based on famous 2d graphic engine [Skia.org](https://skia.org/), which has compatibility with CSS in the Web.
 We can export the estimated rendering parameters and edit texts via user interface based on the 2d graphic engine.
 
 <div align = 'center'>
@@ -86,8 +86,6 @@ in progress
 
 ## Reference
 ```bibtex
-
-
 @inproceedings{shimoda2021dst,
                title = {De - rendering Stylized Texts},
                author = {Wataru, Shimoda and Daichi, Haraguchi and Seiichi, Uchida and Koata, Yamaguchi},
