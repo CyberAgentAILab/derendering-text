@@ -5,7 +5,7 @@ Accepted to ICCV2021.
 [paper]()
 [project-page]()
 
-<img src = "example/res0.png" title = "rec" >
+<img src = "example/rec0.png" title = "rec" >
 
 ## Introduction
 This repository contains the codes for ["De-rendering stylized texts"]().
