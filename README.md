@@ -1,4 +1,4 @@
-## Paper (De-rendering stylized texts)
+## Paper [De-rendering stylized texts]
 
 <img src = "example/rec0.png" title = "rec" >
 
@@ -15,7 +15,7 @@ We propose to parse rendering parameters of stylized texts utilizing a neural ne
 <img src = "example/concept.jpg" title = "concept" >
 
 ### Demo
-The proposed model parses rendering parameters based on famous 2d graphic engine [Skia.org](https://skia.org/), which has compatibility with CSS in the Web.
+The proposed model parses rendering parameters based on famous 2d graphic engine[[Skia.org](https://skia.org/)], which has compatibility with CSS in the Web.
 We can export the estimated rendering parameters and edit texts via user interface based on the 2d graphic engine.
 
 <div align = 'center'>
@@ -43,7 +43,7 @@ git clone https://github.com/google/fonts.git gfonts
 ```
 
 ### Pre-rendered alpha maps
-The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre - rendered alpha maps.
+The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.
 Generate pre-rendered alpha maps by
 ```bash
 python -m utilLib.gen_pams
@@ -60,7 +60,7 @@ Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`
 
 ### Test
 Download the weight file from this link.
-[weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)  
+([weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing))  
 Locate the weight file in `weights/font100_unified.pth`.
 
 Example usage.
