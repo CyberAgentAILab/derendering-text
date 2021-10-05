@@ -1,9 +1,11 @@
 ## Paper (De-rendering stylized texts)
 Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>
+
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University
+
 Accepted to ICCV2021.
-[paper]()
-[project-page]()
+[[paper]()]
+[[project-page]()]
 
 <img src = "example/rec0.png" title = "rec" >
 
@@ -47,7 +49,7 @@ Generate pre-rendered alpha maps by
 ```bash
 python -m utilLib.gen_pams
 ```
-Pre-rendered alpha maps would be generated in `data/`
+Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`
 
 <div align = 'center'>
 <img src = "example/sample.jpg" title = "inp" height = "300" >
@@ -79,9 +81,9 @@ in progress
 
 ## Todo
 - [x] Testing codes
-- [] Text image generator codes
-- [] Training codes
-- [] Add notebooks for the guide
+- [ ] Text image generator codes
+- [ ] Training codes
+- [ ] Add notebooks for the guide
 
 ## Reference
 ```bibtex
