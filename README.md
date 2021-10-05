@@ -1,6 +1,6 @@
 # De-rendering stylized texts
 
-<img src = "example/rec0.png" title = "rec" >
+<img src = "example/res0.png" title = "rec" >
 
 Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University
@@ -19,8 +19,8 @@ The proposed model parses rendering parameters based on famous 2d graphic engine
 We can export the estimated rendering parameters and edit texts via user interface based on the 2d graphic engine.
 
 <div align = 'center'>
-<img src = "example/edit0.gif" title = "edit0" height = "196" >
-<img src = "example/edit1.gif" title = "edit1" height = "196" >
+<img src = "example/edit0.gif" title = "edit0" height = "220" >
+<img src = "example/edit1.gif" title = "edit1" height = "220" >
 </div>
 
 ## Installation
@@ -44,21 +44,23 @@ git clone https://github.com/google/fonts.git gfonts
 
 ### Pre-rendered alpha maps
 The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre - rendered alpha maps.
-Generate pre - rendered alpha maps by
+Generate pre-rendered alpha maps by
 ```bash
-python - m utilLib.gen_pams
+python -m utilLib.gen_pams
 ```
-Pre - rendered alpha maps would be generated in `data/`
+Pre-rendered alpha maps would be generated in `data/`
 
+<div align = 'center'>
 <img src = "example/sample.jpg" title = "inp" height = "300" >
 <img src = "example/opt.gif" title = "opt" height = "300" >
+</div>
 
 
 ## Usage
 
 ### Test
 Download the weight file from this link.
-[https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)
+[weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)  
 Locate the weight file in `weights/font100_unified.pth`.
 
 Example usage.
