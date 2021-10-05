@@ -16,7 +16,7 @@ We propose to parse rendering parameters of stylized texts utilizing a neural ne
 
 ### Demo
 The proposed model parses rendering parameters based on famous 2d graphic engine[[Skia.org](https://skia.org/)], which has compatibility with CSS in the Web.
-We can export the estimated rendering parameters and edit texts via user interface based on the 2d graphic engine.
+We can export the estimated rendering parameters and edit texts by an off-the-shelf rendering engine using them.
 
 <div align = 'center'>
 <img src = "example/edit0.gif" title = "edit0" height = "220" >
