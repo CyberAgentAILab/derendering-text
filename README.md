@@ -35,16 +35,16 @@ pip install - r requiements.txt
 ```
 
 ### Font data
-The proposed model is trained with google fonts.  
-Download google fonts and locate in `data/fonts/` as `gfonts`.  
+- The proposed model is trained with google fonts.  
+- Download google fonts and locate in `data/fonts/` as `gfonts`.  
 ```bash
 cd data/fonts
 git clone https://github.com/google/fonts.git gfonts
 ```
 
 ### Pre-rendered alpha maps
-The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.  
-Generate pre-rendered alpha maps.
+- The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.  
+- Generate pre-rendered alpha maps.
 ```bash
 python -m utilLib.gen_pams
 ```
@@ -59,9 +59,9 @@ Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`.
 ## Usage
 
 ### Test
-Download the pre-trained weight from this link
+- Download the pre-trained weight from this link
 ([weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)).  
-Locate the weight file in `weights/font100_unified.pth`.  
+- Locate the weight file in `weights/font100_unified.pth`.  
 
 Example usage.
 ```bash
