@@ -1,4 +1,4 @@
-## Paper [De-rendering stylized texts]
+## Paper: De-rendering stylized texts
 
 <img src = "example/rec0.png" title = "rec" >
 
@@ -16,7 +16,7 @@ We propose to parse rendering parameters of stylized texts utilizing a neural ne
 
 ### Demo
 The proposed model parses rendering parameters based on famous 2d graphic engine[[Skia.org](https://skia.org/)], which has compatibility with CSS in the Web.
-We can export the estimated rendering parameters and edit texts by an off-the-shelf rendering engine using them.
+We can export the estimated rendering parameters and edit texts by an off-the-shelf rendering engine.
 
 <div align = 'center'>
 <img src = "example/edit0.gif" title = "edit0" height = "220" >
@@ -35,16 +35,16 @@ pip install - r requiements.txt
 ```
 
 ### Font data
-The proposed model is trained with google fonts.
-Download google fonts and locate in `data/fonts/` as `gfonts`.
+The proposed model is trained with google fonts.  
+Download google fonts and locate in `data/fonts/` as `gfonts`.  
 ```bash
 cd data/fonts
 git clone https://github.com/google/fonts.git gfonts
 ```
 
 ### Pre-rendered alpha maps
-The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.
-Generate pre-rendered alpha maps by
+The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.  
+Generate pre-rendered alpha maps.
 ```bash
 python -m utilLib.gen_pams
 ```
@@ -59,9 +59,9 @@ Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`.
 ## Usage
 
 ### Test
-Download the weight file from this link
+Download the pre-trained weight from this link
 ([weight](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing)).  
-Locate the weight file in `weights/font100_unified.pth`.
+Locate the weight file in `weights/font100_unified.pth`.  
 
 Example usage.
 ```bash
@@ -87,7 +87,7 @@ in progress
 ## Reference
 ```bibtex
 @inproceedings{shimoda2021dst,
-               title = {De - rendering Stylized Texts},
+               title = {De-rendering Stylized Texts},
                author = {Wataru, Shimoda and Daichi, Haraguchi and Seiichi, Uchida and Koata, Yamaguchi},
                booktitle = {Proceedings of the IEEE / CVF International Conference on Computer Vision.},
                year = {2021}
