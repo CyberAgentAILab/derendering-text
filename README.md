@@ -5,11 +5,11 @@
 Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>  
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 Accepted to ICCV2021.
-[[paper]()]
+[[paper](https://arxiv.org/abs/2110.01890)]
 [[project-page]()]
 
 ## Introduction
-This repository contains the codes for ["De-rendering stylized texts"]().
+This repository contains the codes for ["De-rendering stylized texts"](https://arxiv.org/abs/2110.01890).
 ### Concept
 We propose to parse rendering parameters of stylized texts utilizing a neural net.
 <img src = "example/concept.jpg" title = "concept" >
@@ -86,13 +86,14 @@ in progress
 
 ## Reference
 ```bibtex
-@inproceedings{shimoda2021dst,
-               title = {De-rendering Stylized Texts},
-               author = {Wataru, Shimoda and Daichi, Haraguchi and Seiichi, Uchida and Koata, Yamaguchi},
-               booktitle = {Proceedings of the IEEE / CVF International Conference on Computer Vision.},
-               year = {2021}
-               }
-```
+@InProceedings{Shimoda_2021_ICCV,
+    author    = {Shimoda, Wataru and Haraguchi, Daichi and Uchida, Seiichi and Yamaguchi, Kota},
+    title     = {De-Rendering Stylized Texts},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2021},
+    pages     = {1076-1085}
+}```
 
 ## Contact
 This repository is maintained by Wataru shimoda(wataru_shimoda[at]cyberagent.co.jp).
