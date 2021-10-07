@@ -1,4 +1,4 @@
-## Paper: De-rendering stylized texts
+## Paper: De-rendering Stylized Texts
 
 <img src = "example/rec0.png" title = "rec" >
 
@@ -6,7 +6,7 @@ Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 Accepted to ICCV2021.
 [[paper](https://arxiv.org/abs/2110.01890)]
-[[project-page]()]
+[[project-page](https://cyberagentailab.github.io/derendering-text/)]
 
 ## Introduction
 This repository contains the codes for ["De-rendering stylized texts"](https://arxiv.org/abs/2110.01890).
@@ -15,7 +15,7 @@ We propose to parse rendering parameters of stylized texts utilizing a neural ne
 <img src = "example/concept.jpg" title = "concept" >
 
 ### Demo
-The proposed model parses rendering parameters based on famous 2d graphic engine[[Skia.org](https://skia.org/)], which has compatibility with CSS in the Web.
+The proposed model parses rendering parameters based on famous 2d graphic engine[[Skia.org](https://skia.org/)|[python implementation](https://github.com/kyamagu/skia-python)], which has compatibility with CSS in the Web.
 We can export the estimated rendering parameters and edit texts by an off-the-shelf rendering engine.
 
 <div align = 'center'>
@@ -46,7 +46,7 @@ git clone https://github.com/google/fonts.git gfonts
 - The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.  
 - Generate pre-rendered alpha maps.
 ```bash
-python -m utilLib.gen_pams
+python -m util_lib.gen_pams
 ```
 Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`.
 

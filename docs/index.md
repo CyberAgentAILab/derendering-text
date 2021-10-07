@@ -1,37 +1,22 @@
-## Welcome to GitHub Pages
+---
+layout: default
+---
 
-You can use the [editor on GitHub](https://github.com/CyberAgentAILab/derendering-text/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+<!-- Text can be **bold**, _italic_, or ~~strikethrough~~.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+[Link to another page](./another-page.html).
 
-### Markdown
+There should be whitespace between paragraphs.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+There should be whitespace between paragraphs. We recommend including a README, or a file with information about your project. -->
 
-```markdown
-Syntax highlighted code block
+## De-rendering stylized texts
 
-# Header 1
-## Header 2
-### Header 3
+![Branching](https://github.com/CyberAgentAILab/derendering-text/blob/master/example/concept.jpg)
 
-- Bulleted
-- List
+Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>  
+<sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 
-1. Numbered
-2. List
+### Abstruct
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/CyberAgentAILab/derendering-text/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Editing raster text is a promising but challenging task. We propose to apply text vectorization for the task of raster text editing in display media, such as posters, web pages, or advertisements. In our approach, instead of applying image transformation or generation in the raster domain, we learn a text vectorization model to parse all the rendering parameters including text, location, size, font, style, effects, and hidden background, then utilize those parameters for reconstruction and any editing task. Our text vectorization takes advantage of differentiable text rendering to accurately reproduce the input raster text in a resolution-free parametric format. We show in the experiments that our approach can successfully parse text, styling, and background information in the unified model, and produces artifact-free text editing compared to a raster baseline.

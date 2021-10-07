@@ -1,1 +1,7 @@
 theme: jekyll-theme-cayman
+title: De-rendering stylized texts
+description: 
+show_downloads: true
+github:
+  paper_url: https://arxiv.org/abs/2110.01890
+  code_url: https://github.com/CyberAgentAILab/derendering-text
