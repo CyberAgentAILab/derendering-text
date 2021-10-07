@@ -31,7 +31,7 @@ We can export the estimated rendering parameters and edit texts by an off-the-sh
 - torchvision >= 0.9.1
 
 ```bash
-pip install - r requiements.txt
+pip install -r requiements.txt
 ```
 
 ### Font data
