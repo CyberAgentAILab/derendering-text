@@ -1,7 +1,8 @@
-theme: jekyll-theme-cayman
-title: De-rendering stylized texts
+title: De-rendering Stylized Texts
 description: 
 show_downloads: true
 github:
+  pub_url: https://openaccess.thecvf.com/content/ICCV2021/html/Shimoda_De-Rendering_Stylized_Texts_ICCV_2021_paper.html
   paper_url: https://arxiv.org/abs/2110.01890
   code_url: https://github.com/CyberAgentAILab/derendering-text
+theme: jekyll-theme-cayman

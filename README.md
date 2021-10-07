@@ -5,7 +5,8 @@
 Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>  
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 Accepted to ICCV2021.
-[[paper](https://arxiv.org/abs/2110.01890)]
+[[Publication](https://openaccess.thecvf.com/content/ICCV2021/html/Shimoda_De-Rendering_Stylized_Texts_ICCV_2021_paper.html)]
+[[Arxiv](https://arxiv.org/abs/2110.01890)]
 [[project-page](https://cyberagentailab.github.io/derendering-text/)]
 
 ## Introduction
