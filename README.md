@@ -93,7 +93,8 @@ in progress
     month     = {October},
     year      = {2021},
     pages     = {1076-1085}
-}```
+}
+```
 
 ## Contact
 This repository is maintained by Wataru shimoda(wataru_shimoda[at]cyberagent.co.jp).
