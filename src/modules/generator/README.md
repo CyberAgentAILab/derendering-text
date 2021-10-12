@@ -79,28 +79,34 @@ Note
 
 
 ## Visualizer
-We prepare visualizer for the generated data.
-To visualize, run `util_lib/visualizer.py` with a target metadata file name.
+We prepare visualizer for the generated data.  
+To visualize, run `util_lib/visualizer.py` with a target metadata file name.  
 Example usage.
 ```bash
-python -m util_lib.visualizer.py --filename=gen_data/load_eng_tmp/metadata/0_0.pkl
+python -m util_lib.visualizer --filename=gen_data/load_eng_tmp/metadata/0_0.pkl
 ```
-<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "200" ><img src = "../../../gen_data/vis/charBB.jpg" title = "character bounding boxes" height = "200" ><img src = "../../../gen_data/vis/textBB.jpg" title = "text bounding boxes" height = "200" >
+<p>
+<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "200" >
+<em>image_caption</em>
+</p>
+<p>
+<img src = "../../../gen_data/vis/charBB.jpg" title = "character bounding boxes" height = "200" >
+</p>
+<img src = "../../../gen_data/vis/textBB.jpg" title = "text bounding boxes" height = "200" >
 <img src = "../../../gen_data/vis/shadow_alpha.jpg" title = "shadow effect" height = "200" ><img src = "../../../gen_data/vis/fill_alpha.jpg" title = "fill effect" height = "200" ><img src = "../../../gen_data/vis/border_alpha.jpg" title = "border effect" height = "200" >
 
 
 
 ## Datasets
 
-
-### Datasets used in the paper
 We generate text images with the following five types of background images.
 - SynthText dataset
 - FMD dataset
 - Color dataset
 - Book cover dataset
 - BAM dataset
-#### SynthText dataset
+
+### SynthText dataset
 Use Pre-processed Background Images in [SynthText](https://github.com/ankush-me/SynthText).
 Download the following files and locate them in `data/`.
 - http://thor.robots.ox.ac.uk/~vgg/data/scenetext/preproc/bg_img.tar.gz
@@ -114,44 +120,45 @@ Run
 python gen.py --bgtype=synth_text
 ```
 
-#### Color background
+### Color background
 This data generation requires no datasets.
 Run
 ```bash
 python gen.py --bgtype=color
 ```
 
-#### FMD dataset
+### FMD dataset
 Download datasets from [link](https://people.csail.mit.edu/celiu/CVPR2010/FMD/) and locate them in `data/`.
 Run
 ```bash
 python gen.py --bgtype=fmd
 ```
 
-#### BAM dataset
-Download datasets from [link](https://bam-dataset.org/).
-Pre-compute saliency mask for limiting text area.
-In the paper, we generate masks by [saliency model](https://github.com/backseason/PoolNet) and erase texts in BAM images in advance utilizing existing OCR and inpainting models.
-For erasing texts, we will prepare a util library in `util_lib/eraser.py`.
-I recommend utilizing them.
+### BAM dataset
+Download datasets from [link](https://bam-dataset.org/).  
+Pre-compute saliency mask for limiting text area.  
+In the paper, we generate masks by [saliency model](https://github.com/backseason/PoolNet) and erase texts in BAM images in advance utilizing existing OCR and inpainting models.  
+For erasing texts, we will prepare a util library in `util_lib/eraser.py`.  
+I recommend utilizing them.  
 
-After the pre-processings, run
+After the pre-processings, run with specifying the directories of background images and masks with options.
+```bash
+python gen.py --bgtype=bam --bg_dir=${bg_dir} --mask_dir=${mask_dir}
+```
+
+### BOOK dataset
+Download datasets from [link](https://github.com/uchidalab/book-dataset).  
+Generate mask and erase texts in the similar way to the BAM dataset.  
+After the pre-processings, run with specifying the directories of background images and masks with options.
+```bash
+python gen.py --bgtype=book --bg_dir=${bg_dir} --mask_dir=${mask_dir}
+```
+
+### Other background images.
+Any images would be used as background images if we generate masks using salinecy maps and apply the text eraser in advance.
+After the pre-processings, run with specifying the directories of background images and masks with options.
 ```bash
 python gen.py --bgtype=load --bg_dir=${bg_dir} --mask_dir=${mask_dir}
 ```
-Note: BAM dataset requires registration for downloading.
-
-#### BOOK dataset
-Download datasets from [link](https://github.com/uchidalab/book-dataset).
-Generate mask and erase texts in the similar way to the BAM dataset.
-After the pre-processings, run
-```bash
-python gen.py --bgtype=load --bg_dir=${bg_dir} --mask_dir=${mask_dir}
-```
-
-### Generate text images with own data
-This text image generator generates text images from background images.
-
-```bash
-python gen.py --bgtype=load --bg_dir=${bg_dir} --mask_dir=${mask_dir}
-```
+Note: some text images may remain though the text eraser applied, but it will harms only training of the model for prediction of text foreground.
+The generated images with remined text will support the training of training of estimation of other rendering parameters.
