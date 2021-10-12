@@ -85,8 +85,12 @@ Example usage.
 ```bash
 python -m util_lib.visualizer.py --filename=gen_data/load_eng_tmp/metadata/0_0.pkl
 ```
-<img src = "gen_data/vis/rendered_img.jpg" title = "rendered image" height = "300" >
-<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "300" >
+<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "100" >
+<img src = "../../../gen_data/vis/charBB.jpg" title = "character bounding boxes" height = "100" >
+<img src = "../../../gen_data/vis/textBB.jpg" title = "text bounding boxes" height = "100" >
+<img src = "../../../gen_data/vis/shadow_alpha.jpg" title = "shadow effect" height = "100" >
+<img src = "../../../gen_data/vis/fill_alpha.jpg" title = "fill effect" height = "100" >
+<img src = "../../../gen_data/vis/border_alpha.jpg" title = "border effect" height = "100" >
 
 
 
