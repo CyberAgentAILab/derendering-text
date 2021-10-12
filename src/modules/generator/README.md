@@ -1,5 +1,5 @@
 # Text Image Generator
-This work is inspired by [SynthText](https://github.com/ankush-me/SynthText).
+This work is inspired by [SynthText](https://github.com/ankush-me/SynthText).  
 We focus on text images for the displayed media such as posters, web pages, or advertisements.  
 
 ## Introduction
@@ -8,7 +8,7 @@ This text image generator repeats the following steps to generate text images.
 - Render a text with the parameters
 
 ### Renderer
-This text image generator's renderer is based on [skia-python](https://github.com/kyamagu/skia-python), which is a python binding of the modern 2d graphic engine [Skia.org](https://Skia.org).
+This text image generator's renderer is based on [skia-python](https://github.com/kyamagu/skia-python), which is a python binding to the modern 2d graphic engine [Skia.org](https://Skia.org).
 
 Currently, we support the following effects.
 - Fill
@@ -36,7 +36,7 @@ python gen.py --bgtype=load --bg_dir=src/modules/generator/example/bg --mask_dir
 
 ### Directory organization
 
-The generated text images and rendering parameters would be located in `gen_data/${save_dir}`.
+The generated text images and rendering parameters would be located in `gen_data/${save_dir}`.  
 The organization of the generated data is as following:
 <pre> 
 gen_data
@@ -57,12 +57,12 @@ gen_data
 ### Description for formats of generated data
 
 #### Alpha maps
-Text alpha maps for the effects stored with `.npz` format.
+Text alpha maps for the effects are stored with `.npz` format.
 Each alpha maps' dimension would be `Height x Width x 3` in the current version of the generator.
-The first channel for shadow effect alpha, the second channel for fill effect alpha, the third channel for border effect alpha.
+The first channel is for shadow effect alpha, the second channel is for fill effect alpha and the third channel is for border effect alpha.
 #### Rendering parameters
 Rendering parameters are stored by `pickle data format`  with the data object class: `TrainingFormatData()` in `src/dto/dto_generator.py`.
-The class has below elements:
+The class has below attributes:
 - charBB: bounding boxes for characters
 - wordBB: bounding boxes for texts
 - texts: text contents
@@ -74,17 +74,19 @@ The class has below elements:
 - char_offsets: spatial offsets for characters
 
 Note
-- Some elements are nested by other data object class.
+- Some attributes are nested by other data object class.
 - To load pickle data, data object class definition must be loaded.
 
 
 ## Visualizer
 We prepare visualizer for the generated data.
-To visualize, run `util_lib.visualizer.py` with a target metadata file name.
-Example.
+To visualize, run `util_lib/visualizer.py` with a target metadata file name.
+Example usage.
 ```bash
 python -m util_lib.visualizer.py --filename=gen_data/load_eng_tmp/metadata/0_0.pkl
 ```
+<img src = "gen_data/vis/rendered_img.jpg" title = "rendered image" height = "300" >
+<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "300" >
 
 
 
