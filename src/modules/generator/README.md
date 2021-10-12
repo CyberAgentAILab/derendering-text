@@ -160,4 +160,4 @@ After the pre-processings, run with specifying the directories of background ima
 ```bash
 python gen.py --bgtype=load --bg_dir=${bg_dir} --mask_dir=${mask_dir}
 ```
-Note: some text images may remain though the text eraser applied, but it will harms only training of the model for prediction of text foreground. The generated images with remined text will support the training of training of estimation of other rendering parameters.
+Note: some texts may remain in images if we use the text eraser. However, it will harms only training of the text foreground prediction. The generated images will support the training of estimation of other rendering parameters though some texts remain in background images.
