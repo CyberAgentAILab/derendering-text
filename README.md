@@ -36,12 +36,17 @@ pip install -r requiements.txt
 ```
 
 ### Font data
-- The proposed model is trained with google fonts.  
-- Download google fonts and locate in `data/fonts/` as `gfonts`.  
-```bash
-cd data/fonts
-git clone https://github.com/google/fonts.git gfonts
-```
+- The proposed model is trained with google fonts.
+- ~~Download google fonts and locate in `data/fonts/` as `gfonts`.~~
+	- Note: the organization of font files in the [google fonts](https://github.com/google/fonts.git) are updated from our environment. 
+- Download font files from this link([ofl](https://drive.google.com/file/d/139WdwF7BUKKreELK9jdKXZaYqRQd_pzn/view?usp=sharing)) and locate in `data/fonts/gfonts/`.
+
+```diff
+- cd　data/fonts
+- git clone https://github.com/google/fonts.git gfonts
++ mkdir data/fonts/gfonts; cd data/fonts/gfonts
++ tar xvzf ofl.tar.gz
+``` 
 
 ### Pre-rendered alpha maps
 - The proposed model parses rendering parameters and refines them through the differentiable rendering model, which uses pre-rendered alpha maps.  
