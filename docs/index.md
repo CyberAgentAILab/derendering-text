@@ -3,6 +3,9 @@ layout: default
 ---
 
 ## De-rendering Stylized Texts
+<iframe width="560" height="315" src="https://www.youtube.com/embed/R8PinaLyci0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
 ![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/concept.jpg)
 
 Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</sup>, Kota Yamaguchi<sup>1</sup>  
