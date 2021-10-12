@@ -85,15 +85,15 @@ Example usage.
 ```bash
 python -m util_lib.visualizer --filename=gen_data/load_eng_tmp/metadata/0_0.pkl
 ```
-<p>
-<img src = "../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height = "200" >
-<em>image_caption</em>
-</p>
-<p>
-<img src = "../../../gen_data/vis/charBB.jpg" title = "character bounding boxes" height = "200" >
-</p>
-<img src = "../../../gen_data/vis/textBB.jpg" title = "text bounding boxes" height = "200" >
-<img src = "../../../gen_data/vis/shadow_alpha.jpg" title = "shadow effect" height = "200" ><img src = "../../../gen_data/vis/fill_alpha.jpg" title = "fill effect" height = "200" ><img src = "../../../gen_data/vis/border_alpha.jpg" title = "border effect" height = "200" >
+
+|<img src="../../../gen_data/vis/rendered_img.jpg" title = "rendered image" height=200> | <img src="../../../gen_data/vis/charBB.jpg" height=200 title = "character bounding boxes"> | <img src="../../../gen_data/vis/textBB.jpg" height=200 title = "text bounding boxes">|
+|--|--|--|
+| <center>Rendered image</center> | <center>Character bounding boxes</center> | <center>Text bounding boxes</center> |
+
+|<img src="../../../gen_data/vis/shadow_alpha.jpg" title = "shadow effect" height=200> | <img src="../../../gen_data/vis/fill_alpha.jpg" height=200 title = "fill effect"> | <img src="../../../gen_data/vis/border_alpha.jpg" height=200 title = "border effect">|
+|--|--|--|
+| <center>Shadow effect alpha</center> | <center>Fill effect alpha</center> | <center>Border effect alpha</center> |
+
 
 
 
@@ -160,5 +160,4 @@ After the pre-processings, run with specifying the directories of background ima
 ```bash
 python gen.py --bgtype=load --bg_dir=${bg_dir} --mask_dir=${mask_dir}
 ```
-Note: some text images may remain though the text eraser applied, but it will harms only training of the model for prediction of text foreground.
-The generated images with remined text will support the training of training of estimation of other rendering parameters.
+Note: some text images may remain though the text eraser applied, but it will harms only training of the model for prediction of text foreground. The generated images with remined text will support the training of training of estimation of other rendering parameters.
