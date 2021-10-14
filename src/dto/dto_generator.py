@@ -6,7 +6,7 @@ import pickle
 import copy
 import random
 import skia
-from src.modules.generator.src.synthtextLib.synthtext_function import TextRegions, DepthCamera, filter_for_placement
+from src.modules.generator.src.synthtext_lib.synthtext_function import TextRegions, DepthCamera, filter_for_placement
 from .dto_skia import(
     FontData,
     TextFormData,
