@@ -24,9 +24,6 @@ We can export the estimated rendering parameters and edit texts by an off-the-sh
 <img src = "example/edit1.gif" title = "edit1" height = "220" >
 </div>
 
-### Video
-<iframe width="560" height="315" src="https://www.youtube.com/embed/R8PinaLyci0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
 
 ## Installation
 
@@ -88,7 +85,7 @@ python gen.py --bgtype=load --bg_dir=src/modules/generator/example/bg --mask_dir
 ```
 The generated text images would be located in `gen_data/`.
 
-For the detail, see [generator](https://github.com/CyberAgentAILab/derendering-text/src/modules/generator/).
+For the detail, see [generator](https://github.com/CyberAgentAILab/derendering-text/blob/master/src/modules/generator/README.md).
 
 ### Train
 in progress
