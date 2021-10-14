@@ -129,7 +129,7 @@ def post_refinement(
         optimizer.step()
         if k % 20 == 0:
             log.debug(f"time: {time.time() - start}")
-            log.debug(f"{k}/{iter_count}, {cnt}, {loss.item()}")
+            log.debug(f"{k}/{200}, {cnt}, {loss.item()}")
             cnt += 1
 
     rec_outs = reconstructor.reconstruction_with_vector_elements(

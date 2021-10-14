@@ -1,8 +1,8 @@
 import numpy as np
 from typing import Tuple
 from src.dto.dto_postprocess import VectorData
-from src.skiaLib import skia_paintor as skp
-from src.skiaLib import skia_util as sku
+from src.skia_lib import skia_paintor as skp
+from src.skia_lib import skia_util as sku
 
 
 def get_offset(i, vd) -> Tuple[int, int]:

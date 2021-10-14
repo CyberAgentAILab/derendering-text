@@ -12,7 +12,7 @@ from torch.functional import F
 
 from src.io import load_font_dicts
 from src.dto.dto_postprocess import MetaDataPostprocessing, TextBlobParameter
-from src.skiaLib.skia_util import get_font_path
+from src.skia_lib.skia_util import get_font_path
 from src.dto.dto_skia import(
     FontData,
     TextFormData

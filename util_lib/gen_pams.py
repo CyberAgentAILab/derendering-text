@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 import skia
-from src.skiaLib import skia_util as sku
+from src.skia_lib import skia_util as sku
 from util.path_list import get_prerendered_alpha_dir
 from src.io import load_char_label_dicts
 from logzero import logger as log
@@ -40,6 +40,7 @@ def gen_fill_pams(
             char_target = char_dict[i].split("")[0]
             font = sku.get_textfont(f, font_size)
             textblob = sku.get_textblob(char_target, font)
+            print(type(textblob))
             canvas.drawTextBlob(textblob, 100, 300, paint_text)
             alpha = surface.makeImageSnapshot().toarray()[
                 :, :, 2]  # extract alpha of R
@@ -105,6 +106,7 @@ def gen_stroke_pams(
 def main():
     log.debug("load character config")
     char_dict, label_dict = load_char_label_dicts()
+    os.makedirs(get_prerendered_alpha_dir(), exist_ok=True)
     log.debug("generate pre-rendered alpha maps for fill")
     gen_fill_pams(char_dict)
     log.debug("generate pre-rendered alpha maps for stroke")
