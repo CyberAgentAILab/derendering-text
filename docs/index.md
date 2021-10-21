@@ -28,8 +28,8 @@ Editing raster text is a promising but challenging task. We propose to apply tex
 
 ### Text edit Demo
 <div align = 'center'>
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit0.gif" title = "edit0" height = "300" >
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit1.gif" title = "edit1" height = "300" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit0.gif" title = "edit0" height = "400" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit1.gif" title = "edit1" height = "400" >
 </div>
 
 ### Results1
