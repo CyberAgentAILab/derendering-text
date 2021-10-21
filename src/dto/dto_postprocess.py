@@ -4,6 +4,7 @@ from typing import Any, List, Tuple
 import numpy as np
 
 from src.io import load_font_dicts
+from src.skia_lib import skia_util as sku
 from .dto_model import BatchWrapperBBI
 from .dto_skia import(
     FontData,
@@ -36,25 +37,6 @@ class InputData:
 
 
 @dataclass
-class EffectParam:
-    """effect data"""
-
-    effect_shadow_params: Any
-    effect_stroke_params: Any
-    shadow_visibility: Any
-    stroke_visibility: Any
-
-
-@dataclass
-class ColorParam:
-    """color data"""
-
-    shadow_color: Any
-    fill_color: Any
-    stroke_color: Any
-
-
-@dataclass
 class TextBlobParameter:
     font_data: FontData
     text_form_data: TextFormData
@@ -71,6 +53,68 @@ class VectorData:
     tb_param: List[TextBlobParameter]
     effect_param: List[EffectParams]  # effect parameters
     effect_visibility: List[EffectVisibility]  # color parameters
+
+    def get_texts(self):
+        texts = {}
+        for index, tb in enumerate(self.tb_param):
+            texts[index] = tb.text
+        return texts
+    def set_text(self, index, text):
+        self.tb_param[index].text=text
+
+    def show_font(self, index):
+        font_dict = load_font_dicts()
+        font_id = self.tb_param[index].font_data.font_id
+        print('font_path',font_dict[font_id])
+    def set_font(self, index, font_id):
+        self.tb_param[index].font_data.font_id=font_id
+        self.update_wscale(index)
+
+    def update_wscale(self, index):
+        x0, y0, x1, y1 = self.tb_param[index].box
+        text = self.tb_param[index].text
+        font_id = self.tb_param[index].font_data.font_id
+        font_size = self.tb_param[index].font_data.font_size
+        font = sku.get_textfont(font_id, font_size)
+        (_, _),(_, text_width), _, _ = sku.get_text_spatial_info(offset_y=0, offset_x=0, font=font, text=text)
+        change_x_ratio = text_width/max(x1-x0,1e-5)
+        new_wscale = (x1-x0)/max(text_width,1e-5)
+        self.tb_param[index].text_form_data.width_scale = new_wscale
+
+    def get_shadow_visibility(self):
+        visibility = {}
+        for index, ev in enumerate(self.effect_visibility):
+            visibility[index] = ev.shadow_visibility_flag
+        return visibility
+    def set_shadow_visibility(self, index, flag):
+        self.effect_visibility[index].shadow_visibility_flag=flag
+    def set_shadow_param(self, index, param: ShadowParam):
+        self.effect_param[index].shadow_param=param
+
+    def set_fill_visibility(self, index, flag):
+        self.effect_visibility[index].fill_visibility_flag=flag
+    def set_fill_param(self, index, param: FillParam):
+        self.effect_param[index].fill_param=param
+
+    def set_stroke_visibility(self, index, flag):
+        self.effect_visibility[index].stroke_visibility_flag=flag
+    def set_stroke_param(self, index, param: StrokeParam):
+        self.effect_param[index].stroke_param=param
+
+    def get_offset(self, index):
+        x0, _, _, _ = self.tb_param[index].box
+        offset_x = int(
+            x0 / max(float(self.tb_param[index].text_form_data.width_scale), 1e-5))
+        offset_y = int(self.tb_param[index].y_start - self.tb_param[index].text_top)
+        return (offset_y, offset_x)
+    def set_offset(self, index, offset_y:int, offset_x:int):
+        x0, y0, x1, y1 = self.tb_param[index].box
+        new_x0 = offset_x * self.tb_param[index].text_form_data.width_scale
+        new_y0 = offset_y
+        dx = new_x0-x0
+        dy = new_y0-y0
+        self.tb_param[index].box = (new_x0, new_y0,x1+dx,y1+dy)
+        self.tb_param[index].y_start = offset_y+self.tb_param[index].text_top
 
     def get_font_names(self):
         font_dict = load_font_dicts()

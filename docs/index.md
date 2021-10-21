@@ -10,7 +10,6 @@ Wataru Shimoda<sup>1</sup>, Daichi Haraguchi<sup>2</sup>, Seiichi Uchida<sup>2</
 <sup>1</sup>CyberAgent.Inc, <sup>2</sup> Kyushu University  
 
 ### Abstruct
-
 Editing raster text is a promising but challenging task. We propose to apply text vectorization for the task of raster text editing in display media, such as posters, web pages, or advertisements. In our approach, instead of applying image transformation or generation in the raster domain, we learn a text vectorization model to parse all the rendering parameters including text, location, size, font, style, effects, and hidden background, then utilize those parameters for reconstruction and any editing task. Our text vectorization takes advantage of differentiable text rendering to accurately reproduce the input raster text in a resolution-free parametric format. We show in the experiments that our approach can successfully parse text, styling, and background information in the unified model, and produces artifact-free text editing compared to a raster baseline.
 
 ### Video
@@ -18,6 +17,24 @@ Editing raster text is a promising but challenging task. We propose to apply tex
 <iframe width="560" height="315" src="https://www.youtube.com/embed/R8PinaLyci0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </div>
 
+### Overview of the proposed model
+![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/model.png)
+
+### Optimization via differentiable text rendering
+<div align = 'center'>
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/sample.jpg" title = "inp" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/opt.gif" title = "opt" >
+</div>
+
+### Text edit Demo
+<div align = 'center'>
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit0.gif" title = "edit0" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit1.gif" title = "edit1" >
+</div>
+
+### Results
+![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec0.png)
+![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec1.png)
 
 ### Citation
 

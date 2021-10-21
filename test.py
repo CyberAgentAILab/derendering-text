@@ -23,13 +23,13 @@ def load_model(dev: torch.device):
     return model
 
 
-def main(args, use_postref=True, iter_count=200):
+def test(imgfile, savepath, saveprefix, gpuid=0, use_postref=True, iter_count=200):
     # show device selectbox
-    dev = torch.device(f"cuda:{args.gpuid}")
+    dev = torch.device(f"cuda:{gpuid}")
     model = load_model(dev)
 
     # load selected image
-    img_norm, img_orig, pil_img = transform_inputs(args.imgfile, 640)
+    img_norm, img_orig, pil_img = transform_inputs(imgfile, 640)
     img_norm, img_orig = img_norm.to(dev), img_orig.to(dev)
     img_size = torch.tensor([pil_img.size[1], pil_img.size[0]]).unsqueeze(0)
     start = time.time()
@@ -65,8 +65,8 @@ def main(args, use_postref=True, iter_count=200):
     save_image(
         Image.fromarray(output_img),
         os.path.join(
-            args.savepath,
-            f'{args.saveprefix}.jpg'))
+            savepath,
+            f'{saveprefix}.jpg'))
     rec_img = torch.max(
         torch.min(
             rec_img,
@@ -78,9 +78,18 @@ def main(args, use_postref=True, iter_count=200):
             rec_img.data.cpu().numpy()[0].transpose(
                 1, 2, 0).astype(
                 np.uint8)), os.path.join(
-                    args.savepath, f'{args.saveprefix}_rec.jpg'))
-    with open(os.path.join(args.savepath, f'{args.saveprefix}.pkl'), mode='wb') as f:
+                    savepath, f'{saveprefix}_rec.jpg'))
+    with open(os.path.join(savepath, f'{saveprefix}.pkl'), mode='wb') as f:
         pickle.dump(vd, f)
+
+def main(args):
+    test(
+        imgfile = args.imgfile,
+        savepath = args.savepath,
+        saveprefix = args.saveprefix,
+        gpuid = args.gpuid
+    )
+    
 
 
 if __name__ == "__main__":

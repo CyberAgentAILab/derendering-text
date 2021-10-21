@@ -61,7 +61,7 @@ Text alpha maps for the effects are stored with `.npz` format.
 Each alpha maps' dimension would be `Height x Width x 3` in the current version of the generator.
 The first channel is for shadow effect alpha, the second channel is for fill effect alpha and the third channel is for border effect alpha.
 #### Rendering parameters
-Rendering parameters are stored by `pickle data format`  with the data object class: `TrainingFormatData()` in `src/dto/dto_generator.py`.
+Rendering parameters are stored by `pickle data format`  with the `@dataclass` object: `TrainingFormatData()` in `src/dto/dto_generator.py`.
 The class has below attributes:
 - charBB: bounding boxes for characters
 - wordBB: bounding boxes for texts
@@ -74,9 +74,7 @@ The class has below attributes:
 - char_offsets: spatial offsets for characters
 
 Note
-- Some attributes are nested by other data object class.
-- To load pickle data, data object class definition must be loaded.
-
+- Some attributes are nested by other `@dataclass` objects.
 
 ## Visualizer
 We prepare visualizer for the generated data.  
