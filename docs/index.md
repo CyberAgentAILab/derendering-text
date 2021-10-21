@@ -22,19 +22,21 @@ Editing raster text is a promising but challenging task. We propose to apply tex
 
 ### Optimization via differentiable text rendering
 <div align = 'center'>
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/sample.jpg" title = "inp" >
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/opt.gif" title = "opt" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/sample.jpg" title = "inp" height = "200" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/opt.gif" title = "opt" height = "200" >
 </div>
 
 ### Text edit Demo
 <div align = 'center'>
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit0.gif" title = "edit0" >
-<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit1.gif" title = "edit1" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit0.gif" title = "edit0" height = "200" >
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/edit1.gif" title = "edit1" height = "200" >
 </div>
 
-### Results
-![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec0.png)
-![Concept](https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec1.png)
+### Results1
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec0.png" title = "edit0" height = "200" >
+
+### Results2
+<img src = "https://raw.githubusercontent.com/CyberAgentAILab/derendering-text/master/example/rec1.png" title = "edit1" height = "200" >
 
 ### Citation
 

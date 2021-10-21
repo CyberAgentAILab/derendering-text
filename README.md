@@ -84,32 +84,32 @@ Here, we prepare a notebook file:`text_edit.ipynb` for the guide of the processi
 
 #### Some examples from `text_edit.ipynb`:
 <div align = 'center'>
-Background editing
+<p>Background editing</p>
 <img src = "example/bg_edit.png" title = "inp" height = "200" >
 </div>
 
 <div align = 'center'>
-Text editing
+<p>Text editing</p>
 <img src = "example/text_edit.png" title = "inp" height = "200" >
 </div>
 
 <div align = 'center'>
-Border effect editing
+<p>Border effect editing</p>
 <img src = "example/border_edit.png" title = "inp" height = "200" >
 </div>
 
 <div align = 'center'>
-Shadow effect editing
+<p>Shadow effect editing</p>
 <img src = "example/shadow_edit.png" title = "inp" height = "200" >
 </div>
 
 <div align = 'center'>
-Text offsets editing
+<p>Text offsets editing</p>
 <img src = "example/offset_edit.png" title = "inp" height = "200" >
 </div>
 
 <div align = 'center'>
-Font editing
+<p>Font editing</p>
 <img src = "example/font_edit.png" title = "inp" height = "200" >
 </div>
 
