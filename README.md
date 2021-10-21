@@ -80,36 +80,36 @@ Note
 
 ### Text image editing
 The proposed model generates a reconstructed image and a pickle file for the parsed rendering parameters.  
-Here, we prepare a notebook file for the guide of the processings to edit text images using the parsed rendering parameters in `text_edit.ipynb`.  
+Here, we prepare a notebook file:`text_edit.ipynb` for the guide of the processings to edit text images using the parsed rendering parameters.  
 
 #### Some examples from `text_edit.ipynb`:
-Background editing
 <div align = 'center'>
+Background editing
 <img src = "example/bg_edit.png" title = "inp" height = "200" >
 </div>
 
-Text editing
 <div align = 'center'>
+Text editing
 <img src = "example/text_edit.png" title = "inp" height = "200" >
 </div>
 
-Border effect editing
 <div align = 'center'>
+Border effect editing
 <img src = "example/border_edit.png" title = "inp" height = "200" >
 </div>
 
-Shadow effect editing
 <div align = 'center'>
+Shadow effect editing
 <img src = "example/shadow_edit.png" title = "inp" height = "200" >
 </div>
 
-Text offsets editing
 <div align = 'center'>
+Text offsets editing
 <img src = "example/offset_edit.png" title = "inp" height = "200" >
 </div>
 
-Font editing
 <div align = 'center'>
+Font editing
 <img src = "example/font_edit.png" title = "inp" height = "200" >
 </div>
 
