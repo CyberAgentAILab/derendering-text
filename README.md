@@ -78,6 +78,44 @@ Note
 - imgfile option: path of an input image
 - results would be generated in `res/`
 
+### Text image editing
+The proposed model generates a reconstructed image and a pickle file for the parsed rendering parameters.  
+Here, we prepare a notebook file for the guide of the processings to edit text images using the parsed rendering parameters in `text_edit.ipynb`.  
+
+#### Some examples from `text_edit.ipynb`:
+Background editing
+<div align = 'center'>
+<img src = "example/bg_edit.png" title = "inp" height = "200" >
+</div>
+
+Text editing
+<div align = 'center'>
+<img src = "example/text_edit.png" title = "inp" height = "200" >
+</div>
+
+Border effect editing
+<div align = 'center'>
+<img src = "example/border_edit.png" title = "inp" height = "200" >
+</div>
+
+Shadow effect editing
+<div align = 'center'>
+<img src = "example/shadow_edit.png" title = "inp" height = "200" >
+</div>
+
+Text offsets editing
+<div align = 'center'>
+<img src = "example/offset_edit.png" title = "inp" height = "200" >
+</div>
+
+Font editing
+<div align = 'center'>
+<img src = "example/font_edit.png" title = "inp" height = "200" >
+</div>
+
+
+
+
 ### Data generation
 Quick start.
 ```bash
@@ -94,8 +132,8 @@ in progress
 ## Todo
 - [x] Testing codes
 - [x] Codes for the text image generator
+- [x] Add notebooks for the guide
 - [ ] Training codes
-- [ ] Add notebooks for the guide
 
 ## Reference
 ```bibtex
