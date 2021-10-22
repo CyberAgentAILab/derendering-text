@@ -61,6 +61,7 @@ class VectorData:
         return texts
     def set_text(self, index, text):
         self.tb_param[index].text=text
+        self.update_wscale(index)
 
     def show_font(self, index):
         font_dict = load_font_dicts()

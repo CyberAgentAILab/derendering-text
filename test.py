@@ -22,10 +22,12 @@ def load_model(dev: torch.device):
     model.eval()
     return model
 
-
-def test(imgfile, savepath, saveprefix, gpuid=0, use_postref=True, iter_count=200):
+def test(imgfile, savepath, saveprefix, use_cpu=False, gpuid=0, use_postref=True, iter_count=200):
     # show device selectbox
-    dev = torch.device(f"cuda:{gpuid}")
+    if use_cpu==True:
+        dev = torch.device(f"cpu")
+    else:
+        dev = torch.device(f"cuda:{gpuid}")
     model = load_model(dev)
 
     # load selected image
@@ -87,6 +89,7 @@ def main(args):
         imgfile = args.imgfile,
         savepath = args.savepath,
         saveprefix = args.saveprefix,
+        use_cpu = args.use_cpu,
         gpuid = args.gpuid
     )
     
@@ -107,6 +110,10 @@ if __name__ == "__main__":
                             default="sample",
                             help='prefix for save data',
                             type=str)
+        parser.add_argument('--use_cpu', required=False,
+                            default=False,
+                            help='use cpu or not',
+                            type=bool)
         parser.add_argument('--gpuid', required=False,
                             default=0,
                             help='gpu id',
