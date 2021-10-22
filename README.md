@@ -132,8 +132,9 @@ in progress
 ## Todo
 - [x] Testing codes
 - [x] Codes for the text image generator
-- [x] Add notebooks for the guide
+- [x] Notebook for text editing
 - [ ] Training codes
+- [ ] Demo app
 
 ## Reference
 ```bibtex
