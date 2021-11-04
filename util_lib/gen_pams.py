@@ -79,12 +79,12 @@ def gen_stroke_pams(
                 char_target = char_dict[i].split("")[0]
                 font = sku.get_textfont(f, font_size)
                 textblob = sku.get_textblob(char_target, font)
-
+                stroke_width = (p * 0.2 * float(font_size) / 25.0) + 0.05
                 paint_text = skia.Paint(
                     AntiAlias=True,
                     Color=skia.ColorRED,
                     Style=skia.Paint.kStroke_Style,
-                    StrokeWidth=p,
+                    StrokeWidth=stroke_width,
                 )
                 canvas.drawTextBlob(textblob, 100, 300, paint_text)
                 alpha = surface.makeImageSnapshot().toarray()[:, :, 2]
