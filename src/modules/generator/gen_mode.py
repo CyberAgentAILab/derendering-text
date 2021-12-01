@@ -46,8 +46,7 @@ def gen_with_synth_text_data(args, gdi):
         'r')
     bg_dir = os.path.join(get_generator_load_data_path(), 'bg_img')
     img_names = sorted(depth_db.keys())
-    #start_idx,end_idx = 0, min(10000,len(img_names))
-    start_idx, end_idx = 0, 3
+    start_idx,end_idx = 0, min(10000,len(img_names))
     # generator handler
     GH = GeneratorHandler(
         get_generator_load_data_path(),

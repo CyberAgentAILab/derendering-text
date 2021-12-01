@@ -39,3 +39,9 @@ def get_newsgroup_text_courpas():
     return os.path.join(
         get_generator_load_data_path(),
         "newsgroup/newsgroup.txt")
+
+
+def get_fmd_data_dir():
+    return os.path.join(
+        get_generator_load_data_path(),
+        "fmd")

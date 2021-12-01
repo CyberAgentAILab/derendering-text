@@ -194,11 +194,27 @@ class DataHandler(object):
                 text_indexes.append(text_index)
         new_bboxes = np.concatenate(new_bboxes, axis=2)
         return new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_indexes
+    
+    def sort_clockwise(self, _rectangles):
+        rectangles = np.zeros_like(_rectangles)
+        for i in range(rectangles.shape[2]):
+            pts = _rectangles[:,:,i].transpose((1,0))
+            rect = np.zeros((4, 2), dtype="float32")
+            s = pts.sum(axis=1)
+            rect[0] = pts[np.argmin(s)]
+            rect[2] = pts[np.argmax(s)]
+            diff = np.diff(pts, axis=1)
+            rect[1] = pts[np.argmin(diff)]
+            rect[3] = pts[np.argmax(diff)]
+            rectangles[:,:,i]=rect.transpose((1,0))
+        return rectangles
 
     def get_training_format_data(self):
         # divide all texts by spaces
         charBB, texts, text_offsets, char_offsets, text_indexes = self.decompose_texts_and_bboxes()
+        charBB = self.sort_clockwise(charBB)        
         wordBB = stu.charBB2wordBB(charBB, texts)
+        wordBB = self.sort_clockwise(wordBB)        
         font_data, text_form_data, effect_params, effect_visibility = [], [], [], []
         for text_index in text_indexes:
             font_dto = FontData(

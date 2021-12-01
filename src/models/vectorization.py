@@ -30,11 +30,11 @@ class Down(nn.Module):
 
 
 class Vectorization(nn.Module):
-    def __init__(self, dev: torch.device = None):
+    def __init__(self, text_pool_num: int=10, dev: torch.device = None):
         super().__init__()
         self.backbone = HourGlassNet(3, [256, 256, 256, 512], [2, 2, 2, 2])
         self.down = Down()
-        self.text_parser = TextParser(dev=dev)
+        self.text_parser = TextParser(text_pool_num=text_pool_num, dev=dev)
         self.initialize_weights()
 
     def initialize_weights(self):

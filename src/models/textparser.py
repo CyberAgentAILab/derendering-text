@@ -20,6 +20,7 @@ class TextParser(nn.Module):
             self,
             e_channel: int = 256,
             t_channel: int = 128,
+            text_pool_num: int = 10,
             dev: torch.device = None):
         super().__init__()
         self.ocr = InnerOCR()
@@ -29,6 +30,7 @@ class TextParser(nn.Module):
         self.font = FontEstimator(e_channel, t_channel)
         #elf.font_size = FontSizeEstimator(e_channel, t_channel)
         self.alpha = AlphaEstimator(e_channel, t_channel)
+        self.text_pool_num = text_pool_num
         self.dev = dev
 
     def forward(self, features_pix: torch.Tensor, img_org: torch.Tensor,
@@ -44,7 +46,7 @@ class TextParser(nn.Module):
         else:
             bbox_information = None
         features_box, text_num = get_bb_level_features(
-            features_pix, text_instance_mask, self.training, self.dev
+            features_pix, text_instance_mask, self.training, self.text_pool_num, self.dev
         )
         # Style Parse model
         effect_visibility_outs = self.effect_visibility(features_box)
@@ -55,12 +57,12 @@ class TextParser(nn.Module):
 
         batch_num = features_pix.shape[0]
         effect_visibility_outs = convert_shape(
-            effect_visibility_outs, batch_num, text_num
+            effect_visibility_outs, batch_num, text_num, self.training, self.text_pool_num
         )
         effect_param_outs = convert_shape(
-            effect_param_outs, batch_num, text_num)
-        font_outs = convert_shape([font_outs], batch_num, text_num)[0]
-        #font_size_outs = convert_shape([font_size_outs], batch_num, text_num)[0]
+            effect_param_outs, batch_num, text_num, self.training, self.text_pool_num)
+        font_outs = convert_shape([font_outs], batch_num, text_num, self.training, self.text_pool_num)[0]
+        #font_size_outs = convert_shape([font_size_outs], batch_num, text_num, self.training, self.text_pool_num)[0]
         return TextInfo(
             ocr_outs,
             bbox_information,

@@ -125,15 +125,29 @@ The generated text images would be located in `gen_data/`.
 
 For the detail, see [generator](https://github.com/CyberAgentAILab/derendering-text/blob/master/src/modules/generator/README.md).
 
-### Train
-in progress
+### Train text parser model
+Quick start.
+Generate training data using simple background dataset.
+```bash
+python gen.py --bgtype=color
+```
 
+Train text parser model with the generated simple background data.
+```bash
+python train.py
+```
+
+For the detail, see [trainer](https://github.com/CyberAgentAILab/derendering-text/blob/master/src/modules/trainer/README.md).
+
+### Train text parser model
+in progress
 
 ## Todo
 - [x] Testing codes
 - [x] Codes for the text image generator
 - [x] Notebook for text editing
-- [ ] Training codes
+- [x] Training codes for text paraser model
+- [ ] Training codes for inpainting model
 - [ ] Demo app
 
 ## Reference

@@ -145,9 +145,7 @@ def extract_bbox_information(
     return bbi
 
 
-def get_bb_level_features(
-    features_pix, text_instance_mask, training, dev: torch.device
-):
+def get_bb_level_features(features_pix, text_instance_mask, training, text_pool_num:int=10, dev: torch.device=None):
     # resize text instance mask
     # print(text_instance_mask.shape)
     text_instance_mask = text_instance_mask.unsqueeze(1).float()
@@ -156,7 +154,7 @@ def get_bb_level_features(
     # mask pooling
     batch_num, channel_num = features_pix.shape[0:2]
     if training:
-        bbox_num = [10] * batch_num
+        bbox_num = [text_pool_num] * batch_num
         features_bb = torch.zeros(
             sum(bbox_num), channel_num, 1, 1).float().to(dev)
     else:
