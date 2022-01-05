@@ -147,7 +147,7 @@ in progress
 - [x] Codes for the text image generator
 - [x] Notebook for text editing
 - [x] Training codes for text paraser model
-- [ ] Training codes for inpainting model
+- [x] Training codes for inpainting model
 - [ ] Demo app
 
 ## Reference

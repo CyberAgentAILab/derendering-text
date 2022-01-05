@@ -102,7 +102,7 @@ class Trainer():
             {'params': self.param_lr_1x, 'lr': lr * 1, 'weight_decay': 2e-4},
             {'params': self.param_lr_10x, 'lr': lr * 10, 'weight_decay': 2e-4},
         ], lr=lr, momentum=0.9, weight_decay=2e-4)
-        self.epochs = 16
+        self.epochs = 31
         # for computing the number of step
         dataloader = torch.utils.data.DataLoader(
             self.dataset,
@@ -116,7 +116,7 @@ class Trainer():
 
     def train_model(self):
         # epochs=self.config.EPOCHS
-        epochs = 16
+        epochs = self.epochs
         self.LR_RAMPDOWN_EPOCHS = int(epochs)
         # Data generators
         dataloader = torch.utils.data.DataLoader(

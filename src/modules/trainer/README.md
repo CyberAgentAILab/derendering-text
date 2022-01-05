@@ -62,10 +62,40 @@ dataset_list=[
 Note, we refrain from providing all datasets used in the paper considering the licenses of the datasets.
 
 We trained the model with two steps in the paper.
-First, we train the proposed model with only OCR branhces.
+First, we train the proposed model with only OCR branches.
 Second, we train an overall model with initialization by the parameters of the model in the first step.
-We used four P100 GPUs for training, but I confirmed the small batch size does not cause serious performance dropping.
-We will provide the pre-trained model for training later.
+The pre-trained model of the text parser is [here](https://drive.google.com/file/d/1pqHWabHyOgkl2IGllGVRTYljfpR9J8xA/view?usp=sharing).
+
+The training script for the reproduction of the text parser model.
+```bash
+python train.py --mode=0 --pret=[path for the above pre-trained model] --batch_size=8 
+```
+
 
 ### Inpaintor model
-in progress
+In the paper, we used three types of datasets (synth text, fmd, color) for a training inpaintor model.  
+The configuration of the datasets for reproduction of the [model](https://drive.google.com/file/d/1HBcfV0nfSluCWCHGgGerx7QNJZJpOv3h/view?usp=sharing) in [`train.py`](https://github.com/CyberAgentAILab/derendering-text/blob/master/train.py#L20-L30) is as follows.  
+```python
+dataset_list=[
+    DatasetConfig(
+        data_dir='DIR_SYNTHTEXTBG_DATASET',
+        prior=1.0,
+        noisy_bg_option=False,
+    )
+    DatasetConfig(
+        data_dir='DIR_FMDBG_DATASET',
+        prior=1.0,
+        noisy_bg_option=False,
+    )
+    DatasetConfig(
+        data_dir='DIR_COLOR_DATASET',
+        prior=1.0,
+        noisy_bg_option=False,
+    )
+]
+```
+
+The training script for the reproduction of the inpaintor model.
+```bash
+python train.py --mode=1 --batch_size=32
+```
