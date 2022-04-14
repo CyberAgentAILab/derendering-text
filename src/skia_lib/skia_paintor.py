@@ -163,6 +163,7 @@ def get_stroke_paint(stroke_param):
         StrokeWidth=stroke_width,
     )
     return stroke_paint
+
 def get_shadow_paint(shadow_param):
     (op,bsz,dp,theta,shift,offsetds_y,offsetds_x,shadow_color) = shadow_param
     shadow_paint = skia.Paint()

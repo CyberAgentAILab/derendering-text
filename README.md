@@ -58,7 +58,7 @@ python -m util_lib.gen_pams
 Pre-rendered alpha maps would be generated in `data/fonts/prerendered_alpha`.
 
 <div align = 'center'>
-<img src = "example/sample.jpg" title = "inp" height = "300" >
+<img src = "example/sample.jpg" title = "inp" height = "300">
 <img src = "example/opt.gif" title = "opt" height = "300" >
 </div>
 
@@ -114,8 +114,6 @@ Here, we prepare a notebook file:`text_edit.ipynb` for the guide of the processi
 </div>
 
 
-
-
 ### Data generation
 Quick start.
 ```bash
@@ -139,8 +137,9 @@ python train.py
 
 For the detail, see [trainer](https://github.com/CyberAgentAILab/derendering-text/blob/master/src/modules/trainer/README.md).
 
-### Train text parser model
-in progress
+### Attribute details
+
+
 
 ## Todo
 - [x] Testing codes

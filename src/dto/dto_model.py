@@ -7,22 +7,21 @@ import numpy as np
 @dataclass
 class WordInstance:
     """
-    単語ごとのBBoxおよびその情報
+    BBox information for each text
     """
 
-    word_bbox: np.ndarray  # TODO: 確かめる
-    word_bbox_score: np.float32
-    text: str
-    text_score: None  # TODO: 確かめる
-    char_scores: np.ndarray  # TODO: 確かめる
-    char_bboxes: np.ndarray  # TODO: 確かめる
+    word_bbox: np.ndarray 
+    word_bbox_score: np.float32 
+    text: str 
+    text_score: None  
+    char_scores: np.ndarray  
+    char_bboxes: np.ndarray  
 
 
 @dataclass
 class BBoxInformation:
     """
-    BBox情報（各フィールドはバッチサイズ分のリスト）
-    TODO: データ構造が若干チグハグなのでなんとかする
+    BBox information for texts
     """
 
     word_instances: List[WordInstance]
@@ -73,7 +72,7 @@ class BatchWrapperBBI:
 @dataclass
 class TextInfo:
     """
-    OCRにてパースされたテキスト情報
+    Vectorized text information
     """
 
     ocr_outs: Any
