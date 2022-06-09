@@ -63,28 +63,32 @@ def get_fill_param():
 def get_gradation_param(x_start:int,y_start:int,text_width:int,text_height:int):
     def n(v,minv=0):
         return max(int(v),minv)
+    gradation_mode = random.choices(list(range(0,3)),[1.0,1.0,1.0])[0]
+
     x_start,y_start,text_width,text_height = n(x_start),n(y_start),n(text_width,1),n(text_height,1)
-    if random.random()<0.:
+    
+    tmp_index = random.choices(list(range(0,3)),[1.0,1.0,1.0])[0]
+    if tmp_index==0:
         points = [[x_start, 0], [x_start+text_width, 0]]
-    elif random.random()<0.:
+    elif tmp_index==1:
         points = [[0, y_start], [0, y_start+text_height]]
     else:
         points = [[random.randint(x_start,x_start+text_width), random.randint(y_start,y_start+text_height)], 
                   [random.randint(x_start,x_start+text_width), random.randint(y_start,y_start+text_height)]]
-    if random.random()<0.5:
-        if random.random()<0.5:
-            start = random.randint(0,55)
-            end = random.randint(200,255)
-        else:
-            start = random.randint(200,255)
-            end = random.randint(0,55)
-        colors = [[start,start,start], [end,end,end]]
-    else:
-        colors = [[random.randint(0,255),random.randint(0,255),random.randint(0,255)], [random.randint(0,255),random.randint(0,255),random.randint(0,255)]]
-    c0 = random.random()*0.5
-    c1 = c0 + (1-c0)*random.random()# < 1
-    cstop = [c0,c1]
-    grad_param = (points, colors, cstop)
+        
+    color_num = random.randint(2,5)
+    colors = []
+    cstops = []
+    interval = 1.0/color_num
+    cstart = 0
+    for c in range(color_num):
+        color = get_color()
+        colors.append(color)
+        cmargin = interval*(0.4*random.random()+0.8)
+        cstop = cstart + cmargin
+        cstart += cmargin
+        cstops.append(cstop)
+    grad_param = (gradation_mode, points, colors, cstops)
     return grad_param
 
 def get_stroke_param(size_param:int):
@@ -145,13 +149,29 @@ def get_fill_paint(fill_param):
     )
     return fill_paint
 def get_gradation_paint(grad_param):
-    points, colors, cstop = grad_param
-    points = [skia.Point(points[0][0], points[0][1]), skia.Point(points[1][0], points[1][1])]
-    colors = [skia.ColorSetRGB(colors[0][0],colors[0][1],colors[0][2]), skia.ColorSetRGB(colors[1][0],colors[1][1],colors[1][2])]
+    gradation_mode, points, colors, cstop = grad_param
+    skia_colors = []
+    for c in colors:
+        color = skia.ColorSetRGB(c[0],c[1],c[2])
+        skia_colors.append(color)
     p_grad = skia.Paint(
         AntiAlias=True,
     )
-    p_grad.setShader(skia.GradientShader.MakeLinear(points, colors, cstop))
+    if gradation_mode==0:
+        points = [skia.Point(points[0][0], points[0][1]), skia.Point(points[1][0], points[1][1])]
+        p_grad.setShader(skia.GradientShader.MakeLinear(points, skia_colors, cstop))
+    elif gradation_mode==1:
+        point_x = int((points[0][0] + points[1][0])/2)
+        point_y = int((points[0][1] + points[1][1])/2)
+        radius = max(max(points[1][0]-points[0][0],points[1][1]-points[0][1])/2.,1)
+        point = skia.Point(point_x, point_y)
+        p_grad.setShader(skia.GradientShader.MakeRadial(point, radius, skia_colors, cstop))
+    elif gradation_mode==2:
+        point_x = int((points[0][0] + points[1][0])/2)
+        point_y = int((points[0][1] + points[1][1])/2)
+        p_grad.setShader(skia.GradientShader.MakeSweep(point_x, point_y, skia_colors, cstop))
+    else:
+        raise NotImplementedError()
     return p_grad
 
 def get_stroke_paint(stroke_param):
