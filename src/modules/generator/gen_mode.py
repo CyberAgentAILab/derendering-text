@@ -2,16 +2,17 @@ import os
 import h5py
 import pickle
 import traceback
+from typing import List
 import numpy as np
 import cv2
 from logzero import logger as log
+from src.dto.dto_generator import GeneratorDataInfo, TrainingFormatData, TextGeneratorInputHandler
 from .src.handler import GeneratorHandler
 from .src.synthtext_lib import synthtext_util as stu
-from src.dto.dto_generator import TextGeneratorInputHandler
 from util.path_list import get_generator_load_data_path, get_generator_save_data_path
 
 
-def add_res_to_db(gdi, res, prefix):
+def add_res_to_db(gdi: GeneratorDataInfo, res: List[TrainingFormatData], prefix: int) -> None:
     for i in range(len(res)):
         prefix_instance = f"{prefix}_{i}"
         # save large volume elements with different format like image and alpha
@@ -31,7 +32,7 @@ def add_res_to_db(gdi, res, prefix):
         gdi.prefixes.append(prefix_instance)
 
 
-def gen_with_synth_text_data(args, gdi):
+def gen_with_synth_text_data(args, gdi: GeneratorDataInfo) -> None:
     # load synth text data
     #db = h5py.File(os.path.join(get_generator_load_data_path(),'dset_8000.h5'),'r')
     depth_db = h5py.File(
@@ -93,7 +94,7 @@ def gen_with_synth_text_data(args, gdi):
     seg_db.close()
 
 
-def gen_with_simple_mask(args, gdi):
+def gen_with_simple_mask(args, gdi: GeneratorDataInfo) -> None:
     # open databases:
     start_idx, end_idx = 0, min(10000, len(gdi.loader))
     GH = GeneratorHandler(

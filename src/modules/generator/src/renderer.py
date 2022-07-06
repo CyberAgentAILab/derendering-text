@@ -7,7 +7,6 @@ from src.skia_lib import skia_util as sku
 from .synthtext_lib import synthtext_util as stu
 from src.dto.dto_generator import RenderingData
 
-
 class Renderer(object):
     def render(self, ih: TextGeneratorInputHandler, dh: DataHandler):
         # load data for rendering
@@ -106,7 +105,7 @@ class Renderer(object):
                 rd.fill_paint)
         if rd.gardation_visibility_flag:
             canvas = skp.render_gradation(
-                canvas, rd.textblob, rd.offset_x, rd.offset_y, rd.grad_paint)
+                canvas, rd.textblob, rd.offset_x, rd.offset_y, rd.grad_paint, rd.grad_blend_mode)
         if rd.stroke_visibility_flag:
             canvas = skp.render_stroke(
                 canvas,

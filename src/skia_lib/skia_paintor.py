@@ -48,22 +48,26 @@ def get_canvas(height:int, width:int, img:np.ndarray = None):
         canvas.clear(skia.ColorSetRGB(0, 0, 0))
     return surface, canvas
 
-def get_fill_param():
+def get_color():
     if random.random()<0.2:
         val = random.randint(230,255)
-        fill_color = [val,val,val]
+        color = [val,val,val]
     elif random.random()<0.4:
         val = random.randint(0,50)
-        fill_color = [val,val,val]
+        color = [val,val,val]
     else:
-        fill_color = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
-    fill_param = fill_color
+        color = [random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+    return color
+
+def get_fill_param():
+    fill_param = get_color()
     return fill_param
 
 def get_gradation_param(x_start:int,y_start:int,text_width:int,text_height:int):
     def n(v,minv=0):
         return max(int(v),minv)
     gradation_mode = random.choices(list(range(0,3)),[1.0,1.0,1.0])[0]
+    blend_mode = random.choices(list(range(0,2)),[1.0,1.0])[0]
 
     x_start,y_start,text_width,text_height = n(x_start),n(y_start),n(text_width,1),n(text_height,1)
     
@@ -72,7 +76,7 @@ def get_gradation_param(x_start:int,y_start:int,text_width:int,text_height:int):
         points = [[x_start, 0], [x_start+text_width, 0]]
     elif tmp_index==1:
         points = [[0, y_start], [0, y_start+text_height]]
-    else:
+    elif tmp_index==2:
         points = [[random.randint(x_start,x_start+text_width), random.randint(y_start,y_start+text_height)], 
                   [random.randint(x_start,x_start+text_width), random.randint(y_start,y_start+text_height)]]
         
@@ -88,20 +92,13 @@ def get_gradation_param(x_start:int,y_start:int,text_width:int,text_height:int):
         cstop = cstart + cmargin
         cstart += cmargin
         cstops.append(cstop)
-    grad_param = (gradation_mode, points, colors, cstops)
+    grad_param = (gradation_mode, blend_mode, points, colors, cstops)
     return grad_param
 
 def get_stroke_param(size_param:int):
     stroke_size_rate = random.random()*0.04 + 0.01
     stroke_size = size_param*stroke_size_rate
-    if random.random()<0.2:
-        val = random.randint(230,255)
-        stroke_color = [val,val,val]
-    elif random.random()<0.4:
-        val = random.randint(0,50)
-        stroke_color = [val,val,val]
-    else:
-        stroke_color=[random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+    stroke_color = get_color()
     stroke_param = stroke_size, stroke_color
     return stroke_param
 
@@ -130,14 +127,7 @@ def get_shadow_param(size_param:int):
         op = 0.5+random.random()*0.5
     else:
         op = 1.
-    if random.random()<0.2:
-        val = random.randint(230,255)
-        shadow_color = [val,val,val]
-    elif random.random()<0.4:
-        val = random.randint(0,50)
-        shadow_color = [val,val,val]
-    else:
-        shadow_color=[random.randint(0,255),random.randint(0,255),random.randint(0,255)]
+    shadow_color = get_color()
     shadow_param = (op,bsz,dp,theta,shift,offsetds_y,offsetds_x,shadow_color)
     return shadow_param
 def get_fill_paint(fill_param):
@@ -149,7 +139,7 @@ def get_fill_paint(fill_param):
     )
     return fill_paint
 def get_gradation_paint(grad_param):
-    gradation_mode, points, colors, cstop = grad_param
+    gradation_mode, grad_blend_mode, points, colors, cstop = grad_param
     skia_colors = []
     for c in colors:
         color = skia.ColorSetRGB(c[0],c[1],c[2])
@@ -280,8 +270,13 @@ def render_stroke(canvas: skia.Canvas, textblob:skia.TextBlob, offset_x:int, off
     canvas.drawTextBlob(textblob, offset_x, offset_y, stroke_paint)
     return canvas
 
-def render_gradation(canvas: skia.Canvas, textblob:skia.TextBlob, offset_x:int, offset_y:int, grad_paint:skia.Paint):
-    grad_paint.setBlendMode(skia.BlendMode.kOverlay)
+def render_gradation(canvas: skia.Canvas, textblob:skia.TextBlob, offset_x:int, offset_y:int, grad_paint:skia.Paint, grad_blend_mode: int):
+    if grad_blend_mode==0:
+        grad_paint.setBlendMode(skia.BlendMode.kSrcOver)
+    elif grad_blend_mode==1:
+        grad_paint.setBlendMode(skia.BlendMode.kOverlay)
+    else:
+        NotImplementedError()
     grad_paint.setAlphaf(1)
     canvas.drawTextBlob(textblob, offset_x, offset_y, grad_paint)
     return canvas
@@ -313,7 +308,9 @@ def get_visibility_flag():
     # else:
     #     gradtion_flag=False
     
-    if 0:
+    # Plsase set a prior like above attributes for use of gradation param 
+    # Note that this gradation function is not implemented in the paper
+    if 0: 
         gradtion_flag=True
     else:
         gradtion_flag=False

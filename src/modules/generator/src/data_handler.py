@@ -232,7 +232,7 @@ class DataHandler(object):
             shadow_param, fill_param, grad_param, stroke_param = self.effect_params[text_index]
             opacity, blur, dilation, angle, shift, offset_y, offset_x, shadow_color = shadow_param
             fill_color = fill_param
-            points, gradation_colors, colorstop = grad_param
+            grad_mode, blend_mode, points, gradation_colors, colorstop = grad_param
             border_weight, border_color = stroke_param
             effect_params_dto = EffectParams(
                 shadow_param=ShadowParam(
@@ -249,6 +249,8 @@ class DataHandler(object):
                     color=fill_color
                 ),
                 grad_param=GradParam(
+                    grad_mode=grad_mode,
+                    blend_mode=blend_mode,
                     points=points,
                     colors=gradation_colors,
                     colorstop=colorstop,
@@ -331,8 +333,8 @@ class TmpDataHandler(object):
     def get_data_for_style_sampler(self):
         font_size = self.get_font_size()
         offset_x, offset_y = self.get_text_offsets(0)
-        text_width, text_height = self.get_text_size()
-        return font_size, offset_x, offset_y, text_width, text_height
+        text_height, text_width = self.get_text_size()
+        return font_size, offset_x, offset_y, text_height, text_width
 
     def set_style_sampler_data(
             self,

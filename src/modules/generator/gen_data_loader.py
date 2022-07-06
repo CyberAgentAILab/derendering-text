@@ -1,5 +1,6 @@
 import os
 import random
+from typing import Tuple, List
 import cv2
 import numpy as np
 import scipy.signal as ssig
@@ -11,7 +12,7 @@ class SingleColorBG_Loader(object):
     def __init__(self):
         pass
 
-    def load_bg_and_masks(self, index):
+    def load_bg_and_masks(self, index: int) -> Tuple[np.array, List[np.array]]:
         bg = np.zeros((512, 512, 3))
         if random.random() < 0.2:
             val = random.randint(230, 255)
@@ -36,7 +37,7 @@ class SingleColorBG_Loader(object):
 
 
 class FMD_Loader(object):
-    def __init__(self, data_dir):
+    def __init__(self, data_dir: str):
         self.data_dir = data_dir
         self.category_list = [
             "fabric",
@@ -50,7 +51,7 @@ class FMD_Loader(object):
             "water",
             "wood"]
 
-    def get_box(self, mask, box_mask):
+    def get_box(self, mask: np.array, box_mask: np.array) -> Tuple[np.array,List,int,int]:
         out_arr = np.zeros_like(mask)
         mask[mask > 127] = 1e8
         intersect = ssig.fftconvolve(mask, box_mask[::-1, ::-1], mode='valid')
@@ -59,9 +60,9 @@ class FMD_Loader(object):
         loc = minloc[np.random.choice(minloc.shape[0]), :]
         w, h = box_mask.shape
         out_arr[loc[0]:loc[0] + w, loc[1]:loc[1] + h] += box_mask
-        return out_arr, (loc, w, h)
+        return out_arr, loc, w, h
 
-    def load_bg_and_masks(self, index):
+    def load_bg_and_masks(self, index: int) -> Tuple[np.array, List[np.array]]:
         category = self.category_list[random.randint(0, 9)]
         imid = random.randint(1, 50)
         if category == 'foliage':
@@ -82,7 +83,7 @@ class FMD_Loader(object):
         box_mask = np.ones((256, 256), dtype=np.float32) * 255
         fmd_mask_inv = np.zeros_like(fmd_mask).astype(np.float32)
         fmd_mask_inv = 255 - fmd_mask.astype(np.float32)
-        out, (loc, w, h) = self.get_box(fmd_mask_inv.astype(
+        out, loc, w, h = self.get_box(fmd_mask_inv.astype(
             np.float32), box_mask.astype(np.float32))
         bg = bg_org[loc[0]:loc[0] + w, loc[1]:loc[1] + h, :]
         bg = cv2.resize(bg, (512, 512))
@@ -125,17 +126,17 @@ class Default_Loader(object):
                     mask_name = f'{prefx}.{mask_suffix}'
                     self.mask_list.append(mask_name)
 
-    def load_npz(self, file_name, th=0.5):
+    def load_npz(self, file_name: str, th: float=0.5) -> np.array:
         mask = np.load(file_name)['arr_0'].astype(np.float32)
         loc = mask > 0.5
         mask[loc == 1] = 1
         mask[loc == 0] = 0
         return mask
 
-    def load_img(self, file_name):
+    def load_img(self, file_name: str) -> np.array:
         return cv2.imread(file_name, cv2.IMREAD_UNCHANGED).astype(np.float32)
 
-    def postprocess_for_mask(self, mask, h, w):
+    def postprocess_for_mask(self, mask: np.array, h: int, w: int) -> np.array:
         if mask.shape[0] != h or mask.shape[1] != w:
             mask = cv2.resize(mask, (w, h), interpolation=cv2.INTER_LINEAR)
         return mask * 255

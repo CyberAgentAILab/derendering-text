@@ -24,7 +24,7 @@ class StyleSampler(object):
 
     def sample(self, ih: TextGeneratorInputHandler, dh: DataHandler):
         # get data for style sampler
-        font_size, offset_x, offset_y, text_width, text_height = dh.tmp.get_data_for_style_sampler()
+        font_size, offset_y, offset_x, text_height, text_width = dh.tmp.get_data_for_style_sampler()
         # get visibility flag
         visibility_flags = skp.get_visibility_flag()
         effect_params = self.get_style_params(

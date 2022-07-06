@@ -1,9 +1,10 @@
 import traceback
 from logzero import logger as log
+from typing import List
 from .sampler import Sampler
 from .renderer import Renderer
 from .data_handler import DataHandler
-from src.dto.dto_generator import TextGeneratorInputHandler
+from src.dto.dto_generator import TextGeneratorInputHandler, TrainingFormatData
 from .synthtext_lib import synthtext_util as stu
 
 
@@ -66,7 +67,7 @@ class GeneratorHandler(object):
                 placed_oom = True
         return placed_oom
 
-    def run(self, ih: TextGeneratorInputHandler, ninstance: int = 1):
+    def run(self, ih: TextGeneratorInputHandler, ninstance: int = 1) -> List[TrainingFormatData]:
         res = []
         # generate ninstance number of text images for one background image
         for n in range(ninstance):

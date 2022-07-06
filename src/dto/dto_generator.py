@@ -134,6 +134,7 @@ class RenderingData:
         self.unpack_visibility_flags()
         self.unpack_effect_params()
         self.upack_shadow_params()
+        self.upack_grad_params()
         self.unpack_paints()
         self.unpack_alpha()
 
@@ -149,6 +150,9 @@ class RenderingData:
     def upack_shadow_params(self):
         self.op, self.bsz, self.dp, self.theta, self.shift, self.shadow_offset_y, self.shadow_offset_x, self.shadow_color = self.shadow_param
 
+    def upack_grad_params(self):
+        self.grad_mode, self.grad_blend_mode, self.points, self.colors, self.colorstop = self.grad_param
+        
     def unpack_paints(self):
         self.shadow_paint, self.fill_paint, self.stroke_paint, self.grad_paint = self.paints
 

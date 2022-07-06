@@ -48,12 +48,14 @@ class FillParam:
 
 @dataclass
 class GradParam:
+    grad_mode: int
+    blend_mode: int
     points: List
     colors: List
     colorstop: List
 
     def get_data(self):
-        return self.points, self.colors, self.colorstop
+        return self.grad_mode, self.blend_mode, self.points, self.colors, self.colorstop
 
 
 @dataclass
