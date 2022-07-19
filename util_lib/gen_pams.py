@@ -40,12 +40,13 @@ def gen_fill_pams(
             char_target = char_dict[i].split("")[0]
             font = sku.get_textfont(f, font_size)
             textblob = sku.get_textblob(char_target, font)
-            print(type(textblob))
             canvas.drawTextBlob(textblob, 100, 300, paint_text)
             alpha = surface.makeImageSnapshot().toarray()[
                 :, :, 2]  # extract alpha of R
             alpha_crop = crop_alpha_area(alpha)
             if alpha_crop is None:
+                continue
+            if alpha_crop.shape[0]==0 or alpha_crop.shape[1]==0: 
                 continue
             alpha_crop = cv2.resize(
                 alpha_crop, (64, 64), interpolation=cv2.INTER_CUBIC)
@@ -90,6 +91,8 @@ def gen_stroke_pams(
                 alpha = surface.makeImageSnapshot().toarray()[:, :, 2]
                 alpha_crop = crop_alpha_area(alpha)
                 if alpha_crop is None:
+                    continue
+                if alpha_crop.shape[0]==0 or alpha_crop.shape[1]==0: 
                     continue
                 alpha_crop = cv2.resize(
                     alpha_crop, (64, 64), interpolation=cv2.INTER_CUBIC)
