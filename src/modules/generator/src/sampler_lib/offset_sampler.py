@@ -27,7 +27,7 @@ def get_ascender(ttfont: fontTools.ttLib.ttFont.TTFont, fontSize: int):
 
 
 class OffsetSampler(object):
-    def __init__(self, lang: str):
+    def __init__(self, lang: str, rotate_text_option: bool = False):
         self.lang = lang
 
     def sample_text_type_flags(self, nline: int):
@@ -35,7 +35,7 @@ class OffsetSampler(object):
             vertical_text_flag = 1
         else:
             vertical_text_flag = 0
-        if nline == 1 and random.random() < 0.5:
+        if rotate_text_option is True and nline == 1 and random.random() < 0.5:
             rotate_text_flag = 1
             angle = random.randint(-45, 45)
         else:
