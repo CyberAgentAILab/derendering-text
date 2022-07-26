@@ -8,6 +8,7 @@ from .synthtext_lib import synthtext_util as stu
 from src.dto.dto_generator import RenderingData
 
 class Renderer(object):
+    
     def render(self, ih: TextGeneratorInputHandler, dh: DataHandler):
         # load data for rendering
         current_img = dh.get_canvas_img()
@@ -95,7 +96,7 @@ class Renderer(object):
                 rd.shadow_bitmap,
                 rd.shadow_offset_x,
                 rd.shadow_offset_y)
-        canvas.rotate(rd.angle)
+        canvas.rotate(rd.angle, rd.offset_x, rd.offset_y)
         if rd.fill_visibility_flag:
             canvas = skp.render_fill(
                 canvas,
@@ -113,7 +114,7 @@ class Renderer(object):
                 rd.offset_x,
                 rd.offset_y,
                 rd.stroke_paint)
-        canvas.rotate(-1 * rd.angle)
+        canvas.resetMatrix()
         return canvas
 
     def transform_bboxes(

@@ -12,6 +12,7 @@ def main(args):
     save_dir = 'gen_data/vis'
     cv2.imwrite(os.path.join(save_dir, 'rendered_img.jpg'),output_img[:,:,::-1])
     img_save = output_img.copy().astype(np.uint8)
+    
     # visualize character bounding boxes
     for j in range(tfd.charBB.shape[2]):
         box = tfd.charBB[:,:,j]
@@ -46,6 +47,7 @@ def main(args):
     cv2.imwrite(os.path.join(save_dir, 'shadow_alpha.jpg'),alpha_maps[:,:,0])
     cv2.imwrite(os.path.join(save_dir, 'fill_alpha.jpg'),alpha_maps[:,:,1])
     cv2.imwrite(os.path.join(save_dir, 'border_alpha.jpg'),alpha_maps[:,:,2])
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description='Visualize generated training data.')

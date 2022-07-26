@@ -18,6 +18,7 @@ class TextFormData:
     rotate_text_flag: bool
     angle: float
     width_scale: float
+    text_index: int
 
     def get_data(self):
         return self.vertical_text_flag, self.rotate_text_flag, self.angle, self.width_scale

@@ -15,13 +15,17 @@ def get_paint(effect_params):
         grad_paint = None
     return shadow_paint,fill_paint, stroke_paint, grad_paint
 
-def get_alpha(mask_size: Tuple[int], textblob, offsets: Tuple[int], effect_params:Tuple, paints:Tuple, angle: float=0):
+def get_alpha(mask_size: Tuple[int], textblob, offsets: Tuple[int], effect_params:Tuple, paints:Tuple, pivot_offsets: Tuple=None, angle: float=0):
     height, width = mask_size
     offset_y, offset_x = offsets
+    if pivot_offsets is None:
+        pivot_y, pivot_x = offsets
+    else:
+        pivot_y, pivot_x = pivot_offsets
     shadow_param, fill_param, grad_param, stroke_param = effect_params
     shadow_paint, fill_paint, grad_paint, stroke_paint = paints
-    fill_alpha = get_fill_alpha(height, width, textblob, offset_x, offset_y, angle)
-    stroke_alpha = get_stroke_alpha(height, width, textblob, offset_x, offset_y, stroke_param, angle)
+    fill_alpha = get_fill_alpha(height, width, textblob, offset_x, offset_y, pivot_x, pivot_y, angle)
+    stroke_alpha = get_stroke_alpha(height, width, textblob, offset_x, offset_y, pivot_x, pivot_y, stroke_param, angle)
     shadow_bitmap, shadow_alpha = get_shadow_bitmap_and_alpha(height, width, shadow_param, fill_alpha, shadow_paint)
     return shadow_alpha, fill_alpha, stroke_alpha, shadow_bitmap
 
@@ -225,7 +229,7 @@ def get_shadow_bitmap_and_alpha(height:int, width:int, shadow_param:Tuple, fill_
     else:
         shadow_alpha[:, width + offsetds_x:] = 0
     return shadow_bitmap, shadow_alpha
-def get_stroke_alpha(height:int, width:int, textblob:skia.TextBlob, offset_x:int, offset_y:int, stroke_param:Tuple,angle:float,width_scale:float=1):
+def get_stroke_alpha(height:int, width:int, textblob:skia.TextBlob, offset_x:int, offset_y:int, pivot_x: int, pivot_y: int, stroke_param:Tuple, angle:float,width_scale:float=1):
     surface, canvas = get_canvas(height, width)
     stroke_width, stroke_color = stroke_param
     stroke_paint = skia.Paint(
@@ -234,20 +238,20 @@ def get_stroke_alpha(height:int, width:int, textblob:skia.TextBlob, offset_x:int
         Style=skia.Paint.kStroke_Style,
         StrokeWidth=stroke_width,
     )
-    canvas.rotate(angle)
+    canvas.rotate(angle, pivot_x, pivot_y)
     canvas.scale(width_scale, 1)
     canvas.drawTextBlob(textblob, offset_x, offset_y, stroke_paint)
     canvas.resetMatrix()
     stroke_alpha = surface.makeImageSnapshot().toarray()[:, :, 2]
     return stroke_alpha
-def get_fill_alpha(height:int,width:int, textblob:skia.TextBlob, offset_x:int, offset_y:int,angle:float,width_scale:float=1):
+def get_fill_alpha(height:int,width:int, textblob:skia.TextBlob, offset_x:int, offset_y:int, pivot_x: int, pivot_y: int,angle:float,width_scale:float=1):
     surface, canvas = get_canvas(height,width)
     fill_paint = skia.Paint(
         AntiAlias=True,
         Color=skia.ColorSetRGB(255, 0, 0),
         Style=skia.Paint.kFill_Style,
     )
-    canvas.rotate(angle)
+    canvas.rotate(angle, pivot_x, pivot_y)
     canvas.scale(width_scale, 1)
     canvas.drawTextBlob(textblob, offset_x, offset_y, fill_paint)
     canvas.resetMatrix()

@@ -37,12 +37,12 @@ class OffsetSampler(object):
             vertical_text_flag = 0
         if nline == 1 and random.random() < 0.5:
             rotate_text_flag = 1
-            angle = random.randint(-60, 60)
+            angle = random.randint(-45, 45)
         else:
             rotate_text_flag = 0
             angle = 0
         text_type_flags = (vertical_text_flag, rotate_text_flag)
-        return text_type_flags, 0
+        return text_type_flags, angle
 
     def get_vertical_text_location_info(
             self,
@@ -102,27 +102,39 @@ class OffsetSampler(object):
             total_text_height += text_height + text_height * height_margin_rate
         return bboxes, text_offsets, char_offsets
 
-    def rotate_bb(self, bboxes: np.ndarray, angle: float):
+    def rotate_bb(self, bboxes: np.ndarray, text_offset:List, angle: float):
         sin = math.sin(2 * math.pi * (float(angle) / 360.))
         cos = math.cos(2 * math.pi * (float(angle) / 360.))
+        offset_y, offset_x = text_offset[0]
         rotated_bboxes = np.zeros_like(bboxes)
         for i in range(bboxes.shape[2]):
             for j in range(4):
                 y, x = bboxes[:, j, i]
-                ry = int(sin * x + 1 * cos * y)
-                rx = int(cos * x - 1 * sin * y)
+                ry = int(sin * x + 1 * cos * y + offset_y - offset_x*sin-offset_y*cos)
+                rx = int(cos * x - 1 * sin * y + offset_x - offset_x*cos+offset_y*sin)
                 rotated_bboxes[0, j, i] = ry
                 rotated_bboxes[1, j, i] = rx
         return rotated_bboxes
+    
+    def rotate_offsets(self, offsets:List, baes_offset: Tuple, angle: float):
+        sin = math.sin(2 * math.pi * (float(angle) / 360.))
+        cos = math.cos(2 * math.pi * (float(angle) / 360.))
+        base_offset_y, base_offset_x = baes_offset
+        rotated_offsets = []
+        for i, r in enumerate(offsets):
+            y, x = r
+            ry = int(sin * x + 1 * cos * y + base_offset_y - base_offset_x*sin-base_offset_y*cos)
+            rx = int(cos * x - 1 * sin * y + base_offset_x - base_offset_x*cos+base_offset_y*sin)
+            rotated_offsets.append((ry,rx))
+        return rotated_offsets
 
     def catbboxes(self, bboxes: np.ndarray):
         bboxes_cat = np.concatenate(bboxes, axis=0)
         return bboxes_cat
 
-    def postprocess_for_bboxes(self, bboxes: np.ndarray):
+    def postprocess_for_bboxes(self, bboxes: np.ndarray, angle: float):
         bboxes = self.catbboxes(bboxes)
         bboxes = sku.bb_yxhw2coords(bboxes)
-        #bboxes = self.rotate_bb(bboxes, angle)
         return bboxes
 
     def get_text_location_info(
@@ -138,10 +150,10 @@ class OffsetSampler(object):
         else:
             bboxes, text_offset, char_offset = self.get_horizontal_text_location_info(
                 font_size, font_path, texts, font, angle)
-        bboxes = self.postprocess_for_bboxes(bboxes)
+        bboxes = self.postprocess_for_bboxes(bboxes, angle)
         return bboxes, text_offset, char_offset
 
-    def get_box_offset(self, mask: np.ndarray, text_size: int):
+    def get_box_offset(self, mask: np.ndarray, text_size: int, angle: float):
         text_height, text_width = text_size
         box_mask = np.zeros(
             (int(text_height),
@@ -157,11 +169,19 @@ class OffsetSampler(object):
             return None, box_mask
         minloc = np.transpose(np.nonzero(safemask))
         offset_y, offset_x = minloc[np.random.choice(minloc.shape[0]), :]
+        if angle != 0:
+            cos = abs(math.cos(2 * math.pi * (float(angle) / 360.)))
+            offset_x -= text_height*cos
         return (offset_y, offset_x), box_mask
 
-    def get_text_size_from_bb(self, bboxes: np.ndarray):
+    def get_text_size_from_bb(self, bboxes: np.ndarray, angle: float):
         text_height = np.max(bboxes[0, :, :]) - np.min(bboxes[0, :, :])
         text_width = np.max(bboxes[1, :, :]) - np.min(bboxes[1, :, :])
+        if angle !=0 :
+            sin = abs(math.sin(2 * math.pi * (float(angle) / 360.)))
+            cos = abs(math.cos(2 * math.pi * (float(angle) / 360.)))
+            text_height = text_height*sin + text_width*cos
+            text_width = text_width*sin + text_height*cos
         return text_height, text_width
 
     def sample(self, ih: TextGeneratorInputHandler, dh: DataHandler):
@@ -175,12 +195,11 @@ class OffsetSampler(object):
         bboxes, text_offsets, char_offsets = self.get_text_location_info(
             dh, text_type_flags, angle)
         # get text size from bbox
-        text_size = self.get_text_size_from_bb(bboxes)
+        text_size = self.get_text_size_from_bb(bboxes, angle)
         try:
-            box_offset, box_mask = self.get_box_offset(mask, text_size)
+            box_offset, box_mask = self.get_box_offset(mask, text_size, angle)
         except BaseException:
             box_offset = None
-            # traceback.print_exc()
         if box_offset is None:
             return None
         else:
@@ -190,6 +209,11 @@ class OffsetSampler(object):
             for char_index, char_offset in enumerate(char_offsets):
                 char_offsets[char_index] = sku.add_offset_coords(
                     char_offset, box_offset)
+            if angle !=0:
+                bboxes = self.rotate_bb(bboxes, text_offsets, angle)
+                text_offsets = self.rotate_offsets(text_offsets, text_offsets[0], angle)
+                #for char_index, char_offset in enumerate(char_offsets):
+                #    char_offsets[char_index] = self.rotate_offsets(char_offset, text_offsets[0], angle)
             # set sampled data to data handler
             dh.tmp.set_offset_sampler_data(
                 text_type_flags, angle, text_offsets, char_offsets, text_size)

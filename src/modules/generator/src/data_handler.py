@@ -106,6 +106,7 @@ class DataHandler(object):
         textblob = self.tmp.get_text_blob(text_index)
         effect_params = self.tmp.get_effect_params()
         offsets = self.tmp.get_text_offsets(text_index)
+        textset_offsets = self.tmp.get_text_offsets(0)
         effect_visibility = self.tmp.get_effect_visibility()
         angle = self.tmp.get_angle()
         paints = skp.get_paint(effect_params)
@@ -114,10 +115,14 @@ class DataHandler(object):
             textblob,
             offsets,
             effect_params,
-            paints)
+            paints,
+            pivot_offsets = None,
+            angle = angle,
+        )
         alpha = skp.alpha_with_visibility(alpha, effect_visibility)
         rd = RenderingData(
             textblob=textblob,
+            textset_offsets=textset_offsets,
             offsets=offsets,
             effect_visibility=effect_visibility,
             effect_params=effect_params,
@@ -141,7 +146,10 @@ class DataHandler(object):
             charblob,
             offsets,
             effect_params,
-            paints)
+            paints,
+            pivot_offsets = None,
+            angle = angle,
+        )
         alpha = skp.alpha_with_visibility(alpha, effect_visibility)
         rd = RenderingData(
             textblob=charblob,
@@ -161,29 +169,43 @@ class DataHandler(object):
                 self.alpha_arr[:, :, i], alpha_list[i])
 
     def decompose_texts_and_bboxes(self):
-        new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_indexes = [], [], [], [], []
+        new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_pivots, text_indexes = [], [], [], [], [], []
         for text_index, (box, texts, char_offsets) in enumerate(
                 zip(self.bboxes, self.texts, self.char_offsets)):
-            text = ''.join(texts)
+            #text = '　'.join(texts)
+            #print(text, texts)
             char_offsets = list(chain.from_iterable(char_offsets))
             tmp_box, tmp_char_offset, tmp_text = [], [], ''
             text_offset_index = 0
-            for char_index, char in enumerate(text):
-                if (char == ' ' or char == ' ') and len(tmp_text) > 0:
+            char_index = 0
+            for i, text in enumerate(texts):
+                #_text = ''.join(text)
+                for char in text:
+                    if (char == ' ' or char == ' ') and len(tmp_text) > 0:
+                        new_bboxes.append(np.array(tmp_box).transpose(1, 2, 0))
+                        new_char_offsets.append(tmp_char_offset)
+                        new_texts.append(tmp_text)
+                        new_text_offsets.append(char_offsets[text_offset_index])
+                        text_pivots.append(self.text_offsets[text_index][0])
+                        text_indexes.append(text_index)
+                        tmp_box, tmp_char_offset, tmp_text = [], [], ''
+                        text_offset_index = char_index + 1
+                    elif (char == ' ' or char == ' ') and len(tmp_text) == 0:
+                        text_offset_index = char_index + 1
+                    else:
+                        tmp_box.append(box[:, :, char_index])
+                        tmp_char_offset.append([char_index])
+                        tmp_text += char
+                    char_index += 1
+                if i+1 < len(texts) and len(tmp_box) > 0:
                     new_bboxes.append(np.array(tmp_box).transpose(1, 2, 0))
                     new_char_offsets.append(tmp_char_offset)
                     new_texts.append(tmp_text)
                     new_text_offsets.append(char_offsets[text_offset_index])
+                    text_pivots.append(self.text_offsets[text_index][0])
                     text_indexes.append(text_index)
                     tmp_box, tmp_char_offset, tmp_text = [], [], ''
-                    text_offset_index = char_index + 1
-                elif (char == ' ' or char == ' ') and len(tmp_text) == 0:
-                    text_offset_index = char_index + 1
-                    continue
-                else:
-                    tmp_box.append(box[:, :, char_index])
-                    tmp_char_offset.append([char_index])
-                    tmp_text += char
+                    text_offset_index = char_index
             if len(tmp_box) == 0:
                 pass
             else:
@@ -191,27 +213,58 @@ class DataHandler(object):
                 new_char_offsets.append(tmp_char_offset)
                 new_texts.append(tmp_text)
                 new_text_offsets.append(char_offsets[text_offset_index])
+                text_pivots.append(self.text_offsets[text_index][0])
                 text_indexes.append(text_index)
         new_bboxes = np.concatenate(new_bboxes, axis=2)
-        return new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_indexes
+        return new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_pivots, text_indexes
+    
+    def sort_rectangle(self,poly):
+        # sort the four coordinates of the polygon, points in poly should be sorted clockwise
+        # First find the lowest point
+        p_lowest = np.argmax(poly[:, 1])
+        if np.count_nonzero(poly[:, 1] == poly[p_lowest, 1]) == 2:
+            p0_index = np.argmin(np.sum(poly, axis = 1))
+            p1_index = (p0_index + 1) % 4
+            p2_index = (p0_index + 2) % 4
+            p3_index = (p0_index + 3) % 4
+            return poly[[p0_index, p1_index, p2_index, p3_index]]#, 0.
+        else:
+            p_lowest_right = (p_lowest - 1) % 4
+            p_lowest_left = (p_lowest + 1) % 4
+            angle = np.arctan(
+                -(poly[p_lowest][1] - poly[p_lowest_right][1]) / (poly[p_lowest][0] - poly[p_lowest_right][0]))
+            if angle / np.pi * 180 > 45:
+                p2_index = p_lowest
+                p1_index = (p2_index - 1) % 4
+                p0_index = (p2_index - 2) % 4
+                p3_index = (p2_index + 1) % 4
+                return poly[[p0_index, p1_index, p2_index, p3_index]]#, -(np.pi / 2 - angle)
+            else:
+                p3_index = p_lowest
+                p0_index = (p3_index + 1) % 4
+                p1_index = (p3_index + 2) % 4
+                p2_index = (p3_index + 3) % 4
+                return poly[[p0_index, p1_index, p2_index, p3_index]]#, angle
     
     def sort_clockwise(self, _rectangles):
         rectangles = np.zeros_like(_rectangles)
         for i in range(rectangles.shape[2]):
             pts = _rectangles[:,:,i].transpose((1,0))
-            rect = np.zeros((4, 2), dtype="float32")
-            s = pts.sum(axis=1)
-            rect[0] = pts[np.argmin(s)]
-            rect[2] = pts[np.argmax(s)]
-            diff = np.diff(pts, axis=1)
-            rect[1] = pts[np.argmin(diff)]
-            rect[3] = pts[np.argmax(diff)]
+            rect = self.sort_rectangle(pts)
+            rect = np.array(rect)
+            #             rect = np.zeros((4, 2), dtype="float32")
+            #             s = pts.sum(axis=1)
+            #             rect[0] = pts[np.argmin(s)]
+            #             rect[2] = pts[np.argmax(s)]
+            #             diff = np.diff(pts, axis=1)
+            #             rect[3] = pts[np.argmin(diff)]
+            #             rect[1] = pts[np.argmax(diff)]
             rectangles[:,:,i]=rect.transpose((1,0))
         return rectangles
 
     def get_training_format_data(self):
         # divide all texts by spaces
-        charBB, texts, text_offsets, char_offsets, text_indexes = self.decompose_texts_and_bboxes()
+        charBB, texts, text_offsets, char_offsets, text_pivots, text_indexes = self.decompose_texts_and_bboxes()
         charBB = self.sort_clockwise(charBB)        
         wordBB = stu.charBB2wordBB(charBB, texts)
         wordBB = self.sort_clockwise(wordBB)        
@@ -227,7 +280,8 @@ class DataHandler(object):
                 vertical_text_flag=vertical_text_flag,
                 rotate_text_flag=rotate_text_flag,
                 angle=self.angle[text_index],
-                width_scale=1
+                width_scale=1,
+                text_index = text_index
             )
             shadow_param, fill_param, grad_param, stroke_param = self.effect_params[text_index]
             opacity, blur, dilation, angle, shift, offset_y, offset_x, shadow_color = shadow_param
@@ -272,10 +326,10 @@ class DataHandler(object):
             text_form_data.append(text_form_dto)
             effect_params.append(effect_params_dto)
             effect_visibility.append(effect_visibility_dto)
-        return charBB, wordBB, texts, font_data, text_form_data, effect_params, effect_visibility, text_offsets, char_offsets
+        return charBB, wordBB, texts, font_data, text_form_data, effect_params, effect_visibility, text_offsets, char_offsets, text_pivots
 
     def export_training_format_data(self):
-        charBB, wordBB, texts, font_data, text_form_data, effect_params, effect_visibility, text_offsets, char_offsets = self.get_training_format_data()
+        charBB, wordBB, texts, font_data, text_form_data, effect_params, effect_visibility, text_offsets, char_offsets, text_pivots = self.get_training_format_data()
         tfd = TrainingFormatData(
             bg=self.bg,  # color pixels for background
             img=self.canvas_img,
@@ -288,7 +342,8 @@ class DataHandler(object):
             effect_params=effect_params,
             effect_visibility=effect_visibility,
             text_offsets=text_offsets,
-            char_offsets=char_offsets
+            char_offsets=char_offsets,
+            text_pivots=text_pivots
         )
         return tfd
 

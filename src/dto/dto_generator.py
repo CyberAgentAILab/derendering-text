@@ -123,6 +123,7 @@ class TextGeneratorInputHandler:
 class RenderingData:
     textblob: skia.Font
     offsets: List[float]
+    textset_offsets: List[float]
     effect_visibility: List[bool]
     effect_params: List[Tuple]
     paints: List[skia.Paint]
@@ -131,6 +132,7 @@ class RenderingData:
 
     def unpack(self):
         self.unpack_offsets()
+        self.unpack_textset_offsets()
         self.unpack_visibility_flags()
         self.unpack_effect_params()
         self.upack_shadow_params()
@@ -140,6 +142,9 @@ class RenderingData:
 
     def unpack_offsets(self):
         self.offset_y, self.offset_x = self.offsets
+
+    def unpack_textset_offsets(self):
+        self.textset_offset_y, self.textset_offset_x = self.offsets
 
     def unpack_visibility_flags(self):
         self.shadow_visibility_flag, self.fill_visibility_flag, self.gardation_visibility_flag, self.stroke_visibility_flag = self.effect_visibility
@@ -178,6 +183,7 @@ class TrainingFormatData:
     effect_visibility: List[EffectVisibility]
     text_offsets: List[Tuple[float, float]]
     char_offsets: List[Tuple[float, float]]
+    text_pivots: List[Tuple[float, float]]
 
     def del_large_volume_elements(self):
         self.bg = None

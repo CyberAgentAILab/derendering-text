@@ -93,7 +93,8 @@ class TextFontSampler(object):
                 break
         if text_raw == []:
             return None, (None, None)
-        texts = text_raw.split('\n')
+        
+        texts = text_raw.split(os.linesep)
         return texts, (font_id, font_path)
 
     def get_nline_nchar(
