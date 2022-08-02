@@ -29,14 +29,14 @@ def get_ascender(ttfont: fontTools.ttLib.ttFont.TTFont, fontSize: int):
 class OffsetSampler(object):
     def __init__(self, lang: str, rotate_text_option: bool = False):
         self.lang = lang
+        self.rotate_text_option = rotate_text_option
 
     def sample_text_type_flags(self, nline: int):
         if nline == 1 and random.random() < 0.5 and self.lang == 'jp':
             vertical_text_flag = 1
         else:
             vertical_text_flag = 0
-        #if rotate_text_option is True and nline == 1 and random.random() < 0.5:
-        if 1:
+        if self.rotate_text_option is True and nline == 1 and random.random() < 0.5:
             rotate_text_flag = 1
             angle = random.randint(-45, 45)
         else:
@@ -211,7 +211,7 @@ class OffsetSampler(object):
             total_diff_height = abs(text_height - text_height_org)
             topline_diff_width = abs(text_width_topline_rotate - text_width_topline)
             topline_diff_height = abs(text_height_topline_rotate - text_height_topline)
-            add_offset_x = total_diff_width - topline_diff_height
+            add_offset_x = max(total_diff_width, topline_diff_width)
             add_offset_y = total_diff_height - topline_diff_height
         return add_offset_x, add_offset_y
         
