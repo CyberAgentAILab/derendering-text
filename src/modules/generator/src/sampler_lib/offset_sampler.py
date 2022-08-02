@@ -35,7 +35,8 @@ class OffsetSampler(object):
             vertical_text_flag = 1
         else:
             vertical_text_flag = 0
-        if rotate_text_option is True and nline == 1 and random.random() < 0.5:
+        #if rotate_text_option is True and nline == 1 and random.random() < 0.5:
+        if 1:
             rotate_text_flag = 1
             angle = random.randint(-45, 45)
         else:
@@ -150,10 +151,11 @@ class OffsetSampler(object):
         else:
             bboxes, text_offset, char_offset = self.get_horizontal_text_location_info(
                 font_size, font_path, texts, font, angle)
-        bboxes = self.postprocess_for_bboxes(bboxes, angle)
-        return bboxes, text_offset, char_offset
+        bboxes_topline = self.postprocess_for_bboxes([bboxes[0]], angle)
+        bboxes_all = self.postprocess_for_bboxes(bboxes, angle)
+        return bboxes_all, bboxes_topline, text_offset, char_offset
 
-    def get_box_offset(self, mask: np.ndarray, text_size: int, angle: float):
+    def get_box_offset(self, mask: np.ndarray, text_size: Tuple, text_size_org: Tuple, bboxes_topline: np.array, angle: float):
         text_height, text_width = text_size
         box_mask = np.zeros(
             (int(text_height),
@@ -170,19 +172,64 @@ class OffsetSampler(object):
         minloc = np.transpose(np.nonzero(safemask))
         offset_y, offset_x = minloc[np.random.choice(minloc.shape[0]), :]
         if angle != 0:
-            cos = abs(math.cos(2 * math.pi * (float(angle) / 360.)))
-            offset_x -= text_height*cos
+            text_height_org, text_width_org = text_size_org
+            # This function supports the range of angle: [-90, 90]
+            # A pivot of rotation is at the lower left of a text
+            if angle > 0:
+                add_offset_x, add_offset_y = self.get_add_offset(
+                    text_height_org, 
+                    text_width_org,
+                    text_height, 
+                    text_width,
+                    bboxes_topline,
+                    angle
+                )
+                offset_x += add_offset_x
+                offset_y += add_offset_y
+            elif angle < 0:
+                offset_x += abs(text_width - text_width_org)
+                offset_y += abs(text_height - text_height_org)
         return (offset_y, offset_x), box_mask
-
+    
+    def get_add_offset(
+        self, 
+        text_height_org: int, 
+        text_width_org: int, 
+        text_height: int, 
+        text_width: int, 
+        bboxes_topline: np.array, 
+        angle: float
+    ):
+        text_size_topline = self.get_text_size_from_bb(bboxes_topline,angle)
+        text_height_topline, text_width_topline = text_size_topline
+        text_height_topline_rotate, text_width_topline_rotate = self.get_rotated_text_size(text_size_topline, angle)
+        # there should be different processing in one line text and multiple line texts
+        if text_height == text_height_topline_rotate:
+            add_offset_x, add_offset_y = 0, 0
+        else:
+            total_diff_width = abs(text_width - text_width_org)
+            total_diff_height = abs(text_height - text_height_org)
+            topline_diff_width = abs(text_width_topline_rotate - text_width_topline)
+            topline_diff_height = abs(text_height_topline_rotate - text_height_topline)
+            add_offset_x = total_diff_width - topline_diff_height
+            add_offset_y = total_diff_height - topline_diff_height
+        return add_offset_x, add_offset_y
+        
     def get_text_size_from_bb(self, bboxes: np.ndarray, angle: float):
         text_height = np.max(bboxes[0, :, :]) - np.min(bboxes[0, :, :])
         text_width = np.max(bboxes[1, :, :]) - np.min(bboxes[1, :, :])
-        if angle !=0 :
-            sin = abs(math.sin(2 * math.pi * (float(angle) / 360.)))
-            cos = abs(math.cos(2 * math.pi * (float(angle) / 360.)))
-            text_height = text_height*sin + text_width*cos
-            text_width = text_width*sin + text_height*cos
         return text_height, text_width
+
+    def get_rotated_text_size(self, text_size: Tuple, angle: float):
+        text_height_org, text_width_org = text_size
+        if angle !=0 :
+            sin = math.sin(2 * math.pi * (float(abs(angle)) / 360.))
+            cos = math.cos(2 * math.pi * (float(abs(angle)) / 360.))
+            text_height = text_width_org * sin + text_height_org * cos
+            text_width = text_width_org * cos + text_height_org * sin
+            return text_height, text_width
+        else:
+            return text_height_org, text_width_org
 
     def sample(self, ih: TextGeneratorInputHandler, dh: DataHandler):
         # mask for text placement
@@ -192,12 +239,13 @@ class OffsetSampler(object):
         # get parameters for text types
         text_type_flags, angle = self.sample_text_type_flags(text_line_num)
         # get text location information
-        bboxes, text_offsets, char_offsets = self.get_text_location_info(
+        bboxes, bboxes_topline, text_offsets, char_offsets = self.get_text_location_info(
             dh, text_type_flags, angle)
         # get text size from bbox
-        text_size = self.get_text_size_from_bb(bboxes, angle)
+        text_size_org = self.get_text_size_from_bb(bboxes, angle)
+        text_size_rotate = self.get_rotated_text_size(text_size_org, angle)
         try:
-            box_offset, box_mask = self.get_box_offset(mask, text_size, angle)
+            box_offset, box_mask = self.get_box_offset(mask, text_size_rotate, text_size_org, bboxes_topline, angle)
         except BaseException:
             box_offset = None
         if box_offset is None:
@@ -216,5 +264,5 @@ class OffsetSampler(object):
                 #    char_offsets[char_index] = self.rotate_offsets(char_offset, text_offsets[0], angle)
             # set sampled data to data handler
             dh.tmp.set_offset_sampler_data(
-                text_type_flags, angle, text_offsets, char_offsets, text_size)
+                text_type_flags, angle, text_offsets, char_offsets, text_size_rotate)
         return text_type_flags, angle, bboxes, text_offsets, char_offsets
