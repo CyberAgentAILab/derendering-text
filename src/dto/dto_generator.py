@@ -202,6 +202,7 @@ class TrainingFormatData:
         text_num = len(self.texts)
         merged_alphaBB = []
         for t in range(text_num):
+            # access to metadata for drawing alpha maps
             font_path = self.font_data[t].font_path
             font_size = self.font_data[t].font_size
             skia_font_object = sku.load_font_by_skia_format(font_size, font_path)
@@ -216,14 +217,13 @@ class TrainingFormatData:
             paints = shadow_paint, fill_paint, grad_paint, stroke_paint
             pivot_offsets = self.text_pivots[t]
             angle = self.text_form_data[t].angle
+            
+            # get alpha maps for each text boxes
             alpha = skp.get_alpha(mask_size, textblob, offsets, effect_params, paints, pivot_offsets, angle)
             alpha = skp.alpha_with_visibility(alpha, self.effect_visibility[t].get_data())
             shadow_alpha, fill_alpha, stroke_alpha, _ = alpha
             def get_box_from_alpha(alpha):
-                from imantics import Polygons, Mask
-
                 imgEdge,_ = cv2.findContours(alpha.astype(np.uint8), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-                polygons = Mask(alpha).polygons()
                 imgEdge =np.concatenate(imgEdge, 0)
                 rect = cv2.minAreaRect(imgEdge)
                 box = cv2.boxPoints(rect).reshape((8,))
@@ -232,8 +232,11 @@ class TrainingFormatData:
                     box_yx[0,j] = box[2*j+1]
                     box_yx[1,j] = box[2*j]
                 return box_yx
+            # convert alpha maps to a box
             merged_alpha = shadow_alpha+fill_alpha+stroke_alpha/3
             box = get_box_from_alpha(merged_alpha)
             merged_alphaBB.append(box)
+            
+        # set boxes to the key
         self.effect_merged_alphaBB = np.asarray(merged_alphaBB).transpose(1,2,0)
             
