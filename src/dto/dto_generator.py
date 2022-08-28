@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Optional
 import numpy as np
 import cv2
 import pickle
@@ -7,6 +7,8 @@ import copy
 import random
 import skia
 from src.modules.generator.src.synthtext_lib.synthtext_function import TextRegions, DepthCamera, filter_for_placement
+from src.skia_lib import skia_util as sku
+from src.skia_lib import skia_paintor as skp
 from .dto_skia import(
     FontData,
     TextFormData,
@@ -194,3 +196,44 @@ class TrainingFormatData:
         self.bg = bg
         self.img = img
         self.alpha = alpha
+    
+    def add_effect_merged_alphaBB(self):
+        mask_size = (self.bg.shape[0], self.bg.shape[1])
+        text_num = len(self.texts)
+        merged_alphaBB = []
+        for t in range(text_num):
+            font_path = self.font_data[t].font_path
+            font_size = self.font_data[t].font_size
+            skia_font_object = sku.load_font_by_skia_format(font_size, font_path)
+            textblob = skia.TextBlob(self.texts[t], skia_font_object)
+            offsets = self.text_offsets[t]
+            effect_params = self.effect_params[t].get_data()
+            shadow_param, fill_param, _, stroke_param = effect_params
+            fill_paint = skp.get_fill_paint(fill_param)
+            shadow_paint = skp.get_shadow_paint(shadow_param)
+            stroke_paint = skp.get_stroke_paint(stroke_param)
+            grad_paint = None
+            paints = shadow_paint, fill_paint, grad_paint, stroke_paint
+            pivot_offsets = self.text_pivots[t]
+            angle = self.text_form_data[t].angle
+            alpha = skp.get_alpha(mask_size, textblob, offsets, effect_params, paints, pivot_offsets, angle)
+            alpha = skp.alpha_with_visibility(alpha, self.effect_visibility[t].get_data())
+            shadow_alpha, fill_alpha, stroke_alpha, _ = alpha
+            def get_box_from_alpha(alpha):
+                from imantics import Polygons, Mask
+
+                imgEdge,_ = cv2.findContours(alpha.astype(np.uint8), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+                polygons = Mask(alpha).polygons()
+                imgEdge =np.concatenate(imgEdge, 0)
+                rect = cv2.minAreaRect(imgEdge)
+                box = cv2.boxPoints(rect).reshape((8,))
+                box_yx = np.zeros((2,4),dtype=np.float32)
+                for j in range(4):
+                    box_yx[0,j] = box[2*j+1]
+                    box_yx[1,j] = box[2*j]
+                return box_yx
+            merged_alpha = shadow_alpha+fill_alpha+stroke_alpha/3
+            box = get_box_from_alpha(merged_alpha)
+            merged_alphaBB.append(box)
+        self.effect_merged_alphaBB = np.asarray(merged_alphaBB).transpose(1,2,0)
+            

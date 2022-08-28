@@ -41,6 +41,7 @@ class DataHandler(object):
         self.effect_params = []
         self.effect_visibility = []
         self.alpha_arr = np.zeros((bg.shape[0], bg.shape[1], 3))
+        self.alpha_list_dict = {}
         self.index = 0
         self.effect_num = 3
     # flag management
@@ -167,13 +168,11 @@ class DataHandler(object):
         for i in range(self.effect_num):
             self.alpha_arr[:, :, i] = np.maximum(
                 self.alpha_arr[:, :, i], alpha_list[i])
-
+            
     def decompose_texts_and_bboxes(self):
         new_bboxes, new_texts, new_text_offsets, new_char_offsets, text_pivots, text_indexes = [], [], [], [], [], []
         for text_index, (box, texts, char_offsets) in enumerate(
                 zip(self.bboxes, self.texts, self.char_offsets)):
-            #text = '　'.join(texts)
-            #print(text, texts)
             char_offsets = list(chain.from_iterable(char_offsets))
             tmp_box, tmp_char_offset, tmp_text = [], [], ''
             text_offset_index = 0
@@ -345,6 +344,7 @@ class DataHandler(object):
             char_offsets=char_offsets,
             text_pivots=text_pivots
         )
+        tfd.add_effect_merged_alphaBB()
         return tfd
 
 
