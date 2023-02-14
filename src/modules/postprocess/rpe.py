@@ -517,6 +517,7 @@ def get_textblob_param_with_affine(
             rotate_text_flag=False,
             angle=0,
             width_scale=wscale,
+            text_index = t,
         )
         # size_param,scale,size_paramk,scalek = get_size_param(ft, boxh, boxw, text)
         # wscale = get_wscale(font_ids[t], font_size, text, tlp.x0,tlp.x1)
